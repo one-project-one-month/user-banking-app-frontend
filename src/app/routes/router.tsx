@@ -13,6 +13,7 @@ const router = createBrowserRouter([
         path: "service",
         element: <Service />,
       },
+      {
         path: "/transactions",
         element: <TransactionHistoryPage />,
       },
