@@ -1,7 +1,8 @@
 import { createBrowserRouter } from "react-router-dom";
-import { MainLayout, Service } from "../constants/lazyload";
+import { Home, MainLayout, Service } from "../constants/lazyload";
 import authRouter from "./authRouter";
 import transactionsRouter from "./transactionRouter";
+import scanRouter from "./scanRouter";
 
 const router = createBrowserRouter([
   {
@@ -9,13 +10,17 @@ const router = createBrowserRouter([
     element: <MainLayout />,
     children: [
       {
+        index: true,
+        element: <Home />,
+      },
+      {
         path: "service",
         element: <Service />,
       },
       ...transactionsRouter,
+      ...scanRouter,
     ],
   },
-
   ...authRouter,
 ]);
 
