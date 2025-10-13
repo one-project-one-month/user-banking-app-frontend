@@ -3,6 +3,7 @@ import { MainLayout } from "../constants/lazyload";
 import authRouter from "./authRouter";
 import TransactionHistoryPage from "@/features/transactions/pages/TransactionHistoryPage";
 import TransactionHistoryDetailPage from "@/features/transactions/pages/TransactionHistoryDetailPage";
+import transferRouter from "./transferRouter";
 
 const router = createBrowserRouter([
   {
@@ -20,6 +21,7 @@ const router = createBrowserRouter([
     ],
   },
   ...authRouter,
+  ...transferRouter
 ]);
 
 export default router;
