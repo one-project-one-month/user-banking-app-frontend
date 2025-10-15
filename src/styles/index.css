@@ -50,6 +50,12 @@
   --color-black-pearl-700: #072b46;
   --color-black-pearl-800: #062236;
   --color-black-pearl-900: #041a29;
+
+  --color-body: #1E2939;
+  --color-title: #101828;
+  --color-subtitle: #364153;
+  --color-caption: #F9FAFB;
+  --color-surface-default:#F3F4F6
 }
 
 :root {

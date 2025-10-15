@@ -1,4 +1,4 @@
-import { TransactionDetailPage, TransactionPage } from "../constants/lazyload";
+import { TransactionPage } from "../constants/lazyload";
 
 const transactionsRouter = [
   {
@@ -7,11 +7,7 @@ const transactionsRouter = [
       {
         index: true,
         element: <TransactionPage />,
-      },
-      {
-        path: ":type",
-        element: <TransactionDetailPage />,
-      },
+      }
     ],
   },
 ];

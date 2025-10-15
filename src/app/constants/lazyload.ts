@@ -25,11 +25,6 @@ export const QRToRecievePage = PageLoader(
 export const TransactionPage = PageLoader(
   lazy(() => import("@/features/transactions/pages/TransactionHistoryPage"))
 );
-export const TransactionDetailPage = PageLoader(
-  lazy(
-    () => import("@/features/transactions/pages/TransactionHistoryDetailPage")
-  )
-);
 
 export const Service = PageLoader(
   lazy(() => import("@/features/service/Service"))
