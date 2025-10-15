@@ -1,3 +1,4 @@
+import TransactionDetailPage from "@/features/transactions/pages/TransactionDetailPage";
 import { TransactionPage } from "../constants/lazyload";
 
 const transactionsRouter = [
@@ -7,6 +8,10 @@ const transactionsRouter = [
       {
         index: true,
         element: <TransactionPage />,
+      },
+      {
+        path: ":id",
+        element: <TransactionDetailPage/>
       }
     ],
   },
