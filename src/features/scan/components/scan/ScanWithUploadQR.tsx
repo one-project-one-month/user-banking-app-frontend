@@ -1,10 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { useRef, useState } from "react";
-import ReactCrop, { type Crop } from "react-image-crop";
+import ReactCrop from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
-
-import jsQR from "jsqr";
 
 import { useDropzone } from "react-dropzone";
 import { CloudUpload } from "lucide-react";
