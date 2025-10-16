@@ -5,7 +5,7 @@ function ScanWithCamera() {
     <div className="flex justify-center items-center w-full h-full">
       <div className="w-full h-full  overflow-hidden">
         <Scanner
-          constraints={{ facingMode: { ideal: "user" } }}
+          constraints={{ facingMode: { ideal: "environment" } }}
           onScan={() => alert("Work")}
           onError={console.error}
         />
