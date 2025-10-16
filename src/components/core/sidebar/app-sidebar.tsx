@@ -25,6 +25,7 @@ import {
 
 export function AppSidebar() {
   const path = "/" + useLocation().pathname.split("/")[1];
+  const childPath = path + "/" + useLocation().pathname.split("/")[2];
 
   return (
     <Sidebar className="md:block hidden">
@@ -53,9 +54,9 @@ export function AppSidebar() {
                         <CollapsibleTrigger asChild>
                           <SidebarMenuButton
                             className={cn(
-                              "flex items-center gap-4 py-8 px-4 text-base",
-                              path === item.link &&
-                                "bg-primary text-white rounded-lg hover:bg-primary hover:text-white"
+                              "flex items-center gap-4 py-6 px-4 text-base"
+                              // path === item.link &&
+                              //   "bg-primary text-white rounded-lg hover:bg-primary hover:text-white"
                             )}
                             tooltip={item.name}
                           >
@@ -71,12 +72,13 @@ export function AppSidebar() {
                                 <SidebarMenuSubButton
                                   className={cn(
                                     "flex items-center gap-4 py-6 px-4 text-sm",
-                                    path === subItem.link &&
+                                    childPath === subItem.link &&
                                       "bg-primary text-white rounded-lg hover:bg-primary hover:text-white"
                                   )}
                                   asChild
                                 >
                                   <Link to={subItem.link}>
+                                    {subItem.icon && <item.icon size={16} />}
                                     <span>{subItem.name}</span>
                                   </Link>
                                 </SidebarMenuSubButton>
@@ -94,7 +96,7 @@ export function AppSidebar() {
                     <SidebarMenuButton
                       asChild
                       className={cn(
-                        "flex items-center gap-4 py-8 px-4 text-base",
+                        "flex items-center gap-4 py-6 px-4 text-base",
                         path === item.link &&
                           "bg-primary text-white rounded-lg hover:bg-primary hover:text-white"
                       )}

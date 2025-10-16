@@ -8,11 +8,11 @@ function ShortCutSection() {
         card={{ title: "Transfer", icon: ArrowLeftRight, link: "/transfer" }}
       />
       <ShortCutCard
-        card={{ title: "Scan", icon: ScanLine, link: "/scan-to-pay" }}
+        card={{ title: "Scan", icon: ScanLine, link: "/scan/scan-to-pay" }}
       />
-      <ShortCutCard
+      {/* <ShortCutCard
         card={{ title: "History", icon: History, link: "/transactions" }}
-      />
+      /> */}
     </section>
   );
 }
