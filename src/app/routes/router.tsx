@@ -1,9 +1,9 @@
 import { createBrowserRouter } from "react-router-dom";
-import { MainLayout } from "../constants/lazyload";
+import { Home, MainLayout, Service } from "../constants/lazyload";
 import authRouter from "./authRouter";
-import TransactionHistoryPage from "@/features/transactions/pages/TransactionHistoryPage";
-import TransactionHistoryDetailPage from "@/features/transactions/pages/TransactionHistoryDetailPage";
 import transferRouter from "./transferRouter";
+import transactionsRouter from "./transactionRouter";
+import scanRouter from "./scanRouter";
 
 const router = createBrowserRouter([
   {
@@ -11,17 +11,19 @@ const router = createBrowserRouter([
     element: <MainLayout />,
     children: [
       {
-        path: "/transactions",
-        element: <TransactionHistoryPage />,
+        index: true,
+        element: <Home />,
       },
       {
-        path: "/transactions/:type",
-        element: <TransactionHistoryDetailPage />
-      }
+        path: "service",
+        element: <Service />,
+      },
+      ...transactionsRouter,
+      ...scanRouter,
+      ...transferRouter
     ],
   },
   ...authRouter,
-  ...transferRouter
 ]);
 
 export default router;
