@@ -1,7 +1,13 @@
 import { Link, useLocation } from "react-router-dom";
 import { HandHelping, History, Home, ScanLine, Settings } from "lucide-react";
 
-const NO_NAV_PAGES = ["/login", "/register"];
+const NO_NAV_PAGES = [
+  "/login",
+  "/register",
+  "/scan/qr-to-pay",
+  "/scan/scan-to-pay",
+  "/scan/qr-to-recieve",
+];
 
 function FooterNav() {
   const pathname = useLocation().pathname;
@@ -21,16 +27,19 @@ function FooterNav() {
                 <span className="text-center text-xs">Home</span>
               </Link>
               <Link
-                to="/"
+                to="/transactions"
                 className="flex flex-col gap-y-2 text-primary-custom justify-center items-center"
               >
                 <History className="w-5 h-5" />
                 <span className="text-center text-xs">History</span>
               </Link>
               <div className="relative w-[55px] h-[55px]">
-                <div className="w-[55px] h-[55px] rounded-full bg-primary flex justify-center items-center absolute -top-8 text-white left-0">
+                <Link
+                  to="/scan-to-pay"
+                  className="w-[55px] h-[55px] rounded-full bg-primary flex justify-center items-center absolute -top-8 text-white left-0"
+                >
                   <ScanLine className="w-5 h-5" />
-                </div>
+                </Link>
                 <div className="text-center text-xs w-full absolute bottom-1">
                   Scan
                 </div>
@@ -40,7 +49,7 @@ function FooterNav() {
                 className="flex flex-col gap-y-2 text-primary-custom justify-center items-center"
               >
                 <HandHelping className="w-5 h-5" />
-                <span className="text-center text-xs">Service</span>
+                <span className="text-center text-xs">Transfer</span>
               </Link>
               <Link
                 to="/"

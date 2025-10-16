@@ -11,15 +11,18 @@ type ShortCutCardProps = {
 
 function ShortCutCard({ card }: ShortCutCardProps) {
   return (
-    <Link to={card.link} className="w-full h-full group">
-      <div className="md:h-4/5 h-12 md:group-hover:-translate-y-1 duration-300 transition-all gap-3 w-full flex flex-col justify-center items-center md:bg-white bg-primary rounded-md my-2">
+    <Link
+      to={card.link}
+      className="w-full flex flex-col h-full group transition-all duration-300   hover:-translate-y-1 md:bg-white rounded-2xl"
+    >
+      <div className="flex-2 min-h-12 w-full flex flex-col justify-center items-center md:bg-white bg-primary rounded-md md:rounded-2xl my-2">
         <card.icon
           size={40}
-          className="w-6 md:w-12 md:h-12 group-hover:text-black-pearl-900  h-6 text-white md:text-black-pearl-700"
+          className="w-6 md:w-12 md:h-12 group-hover:animate-pulse group-hover:text-black-pearl-900  h-6 text-white md:text-black-pearl-700"
         />
         {/* <p className="md:block hidden text-white text-lg">{card.title}</p> */}
       </div>
-      <p className="text-center text-black-pearl-700 md:text-white md:text-xl ">
+      <p className="text-center flex-1 text-sm text-black-pearl-700  ">
         {card.title}
       </p>
     </Link>
