@@ -4,6 +4,7 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -36,24 +37,23 @@ const chartConfig = {
 
 export function AmountIncomeAndSpentChart() {
   return (
-    <Card className="rounded-lg h-full">
+    <Card className="rounded-2xl h-full">
       <CardHeader>
-        <CardTitle className="text-black-pearl-700 font-bold text-3xl">
+        <CardTitle className="text-black-pearl-700 font-bold text-xl">
           Income & Expense
         </CardTitle>
-        <CardDescription>
+        <CardDescription className="text-xs ">
           Showing total income and expense per month
         </CardDescription>
       </CardHeader>
-      <CardContent>
-        <ChartContainer config={chartConfig}>
+      <CardContent className="flex justify-center items-center h-full">
+        <ChartContainer className="max-h-42 w-full" config={chartConfig}>
           <AreaChart
             accessibilityLayer
             data={chartData}
             margin={{
               left: 0,
-              right: 12,
-              top: 5,
+              right: 0,
             }}
           >
             <CartesianGrid vertical={false} />
@@ -73,14 +73,14 @@ export function AmountIncomeAndSpentChart() {
             <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
             <Area
               dataKey="expense"
-              type="natural"
+              type="linear"
               fill="#ffc107"
               fillOpacity={0.4}
               stroke="#ffc107"
             />
             <Area
               dataKey="income"
-              type="natural"
+              type="linear"
               fill="#0a3d62"
               fillOpacity={0.4}
               stroke="#0a3d62"

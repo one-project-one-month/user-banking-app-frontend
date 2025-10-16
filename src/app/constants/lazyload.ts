@@ -6,6 +6,10 @@ export const MainLayout = PageLoader(
   lazy(() => import("@/components/core/layouts/MainLayout"))
 );
 
+export const ScanLayout = PageLoader(
+  lazy(() => import("@/components/core/layouts/ScanLayout"))
+);
+
 //*pages
 export const Home = PageLoader(
   lazy(() => import("@/features/home/pages/HomePage"))
