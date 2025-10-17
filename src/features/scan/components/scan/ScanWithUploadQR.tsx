@@ -42,6 +42,7 @@ function ScanWithUploadQR() {
 
       if (!file) return;
 
+      //* once img loaded set the crop value from uploaded  image
       const img = new Image();
       img.src = URL.createObjectURL(file);
       img.onload = () => {
