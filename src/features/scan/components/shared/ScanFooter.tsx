@@ -8,12 +8,10 @@ function ScanFooter() {
     .join("/");
   // const childPath = path + "/" + useLocation().pathname.split("/")[2];
 
-  console.log(path);
-
   return (
-    <div className="relative md:hidden pt-8">
+    <div className="relative md:hidden">
       <footer className="block md:hidden fixed bottom-0 left-0 w-full text-neutral-400  bg-white z-50">
-        <div className="w-full max-w-[85%] mx-auto  py-2 flex justify-between items-center">
+        <div className="w-full max-w-[85%] mx-auto  py-3 flex justify-between items-center">
           <Link
             to="/scan/scan-to-pay"
             className={`flex flex-col gap-y-2 text-primary-custom justify-center items-center ${

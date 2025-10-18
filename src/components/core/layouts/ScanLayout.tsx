@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom";
 
 function ScanLayout() {
   return (
-    <div className="w-full h-full">
+    <div className="w-full h-full pb-9">
       <Outlet />
       <ScanFooter />
     </div>
