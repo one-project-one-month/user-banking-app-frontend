@@ -35,7 +35,7 @@ function FooterNav() {
               </Link>
               <div className="relative w-[55px] h-[55px]">
                 <Link
-                  to="/scan-to-pay"
+                  to="/scan/scan-to-pay"
                   className="w-[55px] h-[55px] rounded-full bg-primary flex justify-center items-center absolute -top-8 text-white left-0"
                 >
                   <ScanLine className="w-5 h-5" />
