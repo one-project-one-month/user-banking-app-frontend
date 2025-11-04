@@ -1,58 +1,72 @@
-import React, { useState } from "react";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Form } from "@/components/ui/form";
+import FormTextInput from "@/components/common/form-inputs/FormTextInput";
+import { useLogin } from "@/queries/auth.query";
+
+const loginSchema = z.object({
+  username: z.string().min(1, "Username is required"),
+  password: z.string().min(1, "Password is required"),
+});
+
+type LoginFormValues = z.infer<typeof loginSchema>;
 
 type LoginFormProps = {
-  onSubmit: (credentials: { username: string; password: string }) => void;
+  onSubmit: () => void;
 };
 
-const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+const LoginForm = ({ onSubmit }: LoginFormProps) => {
+  const form = useForm<LoginFormValues>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      username: "",
+      password: "",
+    },
+  });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (username && password) {
-      onSubmit({ username, password });
-    }
+  const { mutateAsync: login, isPending } = useLogin();
+
+  const handleLogin = async (data: LoginFormValues) => {
+    await login(data);
+    onSubmit();
   };
 
+  const {
+    handleSubmit,
+    formState: { isSubmitting },
+  } = form;
+
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          Email
-        </label>
-        <Input
-          type="text"
-          placeholder="username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          required
+    <Form {...form}>
+      <form onSubmit={handleSubmit(handleLogin)} className="space-y-6 w-full">
+        <FormTextInput
+          name="username"
+          label="Username"
+          placeholder="Enter your name"
+          form={form}
+          wrapperClass="mb-4"
+          className="py-6"
+          labelClass="text-black-pearl-700"
         />
-      </div>
 
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          Password
-        </label>
-        <Input
-          type="password"
+        <FormTextInput
+          name="password"
+          label="Password"
           placeholder="Enter your password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
+          form={form}
+          type="password"
+          wrapperClass="mb-4"
+          className="py-6"
+          labelClass="text-black-pearl-700"
         />
-      </div>
 
-      <Button
-        type="submit"
-        className="w-full"
-        disabled={!username || !password}
-      >
-        Continue
-      </Button>
-    </form>
+        <Button type="submit" className="w-full py-6" disabled={isSubmitting}>
+          {isPending ? "Signing in..." : "Continue"}
+        </Button>
+      </form>
+    </Form>
   );
 };
 

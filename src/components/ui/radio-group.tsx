@@ -28,10 +28,10 @@ export const RadioGroup: React.FC<RadioGroupProps> = ({
 
   return (
     <div className="input-group">
-      <label className="block font-medium mb-1">{label}</label>
+      <label className="font-medium md:text-base text-sm">{label}</label>
       <div className="flex gap-4">
         {normalizedOptions.map((option) => (
-          <label key={option.value} className="flex items-center gap-2">
+          <label key={option.value} className="flex items-center gap-4">
             <input
               type="radio"
               name={label}

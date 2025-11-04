@@ -75,3 +75,6 @@ export const NickNamesPage = PageLoader(
 export const ChangePasswordPage = PageLoader(
   lazy(() => import("@/features/setting/pages/ChangePasswordPage"))
 );
+export const ChangePinPage = PageLoader(
+  lazy(() => import("@/features/setting/pages/ChangePinPage"))
+);
