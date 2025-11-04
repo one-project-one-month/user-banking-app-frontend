@@ -9,8 +9,6 @@ import type {
 import { useMutation } from "@tanstack/react-query";
 import { useDispatch } from "react-redux";
 
-const dispatch = useDispatch();
-
 export const useVerifyEmail = () => {
   return useMutation({
     mutationFn: (data: { email: string }) => verifyEmail(data),
@@ -36,6 +34,8 @@ export const useRegisterUser = () => {
 };
 
 export const useLogin = () => {
+  const dispatch = useDispatch();
+
   return useMutation<LoginResponse | undefined, Error, LoginPayload>({
     mutationFn: (data: LoginPayload) => loginUser(data),
     onSuccess: (data) => {

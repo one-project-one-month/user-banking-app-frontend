@@ -1,5 +1,6 @@
 import {
   ChangePasswordPage,
+  ChangePinPage,
   NickNamesPage,
   ProfileEditPage,
   ProfilePage,
@@ -31,6 +32,10 @@ const settingRouter = [
       {
         path: "change-password",
         element: <ChangePasswordPage />,
+      },
+      {
+        path: "change-pin",
+        element: <ChangePinPage />,
       },
     ],
   },
