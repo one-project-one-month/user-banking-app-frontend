@@ -1,6 +1,15 @@
+import { setTokens } from "@/features/auth/authSlice";
 import { errorToast, successToast } from "@/lib/helper/customToasts";
-import { verifyEmail } from "@/services/auth.service";
+import { loginUser, registerUser, verifyEmail } from "@/services/auth.service";
+import type {
+  LoginResponse,
+  LoginPayload,
+  PersonalDetailPayload,
+} from "@/types/Auth";
 import { useMutation } from "@tanstack/react-query";
+import { useDispatch } from "react-redux";
+
+const dispatch = useDispatch();
 
 export const useVerifyEmail = () => {
   return useMutation({
@@ -10,6 +19,39 @@ export const useVerifyEmail = () => {
     },
     onError: (err) => {
       errorToast("Error Occured", err.message);
+    },
+  });
+};
+
+export const useRegisterUser = () => {
+  return useMutation({
+    mutationFn: (data: PersonalDetailPayload) => registerUser(data),
+    onSuccess: () => {
+      successToast("Success", "User Registered");
+    },
+    onError: (err) => {
+      errorToast("Failed", err.message);
+    },
+  });
+};
+
+export const useLogin = () => {
+  return useMutation<LoginResponse | undefined, Error, LoginPayload>({
+    mutationFn: (data: LoginPayload) => loginUser(data),
+    onSuccess: (data) => {
+      successToast("Success", "Login Successful");
+
+      if (data) {
+        dispatch(
+          setTokens({
+            accessToken: data?.data.accessToken,
+            refreshToken: data?.data.refreshToken,
+          })
+        );
+      }
+    },
+    onError: (err) => {
+      errorToast("Failed", err.message);
     },
   });
 };

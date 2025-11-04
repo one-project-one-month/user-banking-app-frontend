@@ -1,17 +1,18 @@
-import React, { useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
+import { useSearchParams, useNavigate } from "react-router-dom";
+
 import RegisterForm from "../components/RegisterForm";
 import LicenseForm from "../components/LicenseUpload";
 import PassportForm from "../components/PassportForm";
 import FaceScanForm from "../components/FaceScanForm";
 import EmailVeriflyForm from "../components/EmailVeriflyForm";
-import { useVerifyEmail } from "@/queries/auth.query";
 import MobileHeader from "@/components/core/MobileHeader";
+import { useRegisterUser, useVerifyEmail } from "@/queries/auth.query";
 
 type Step = "verify-email" | "register" | "license" | "passport" | "webcam";
 
 type FormData = {
   fullName: string;
-  email: string;
   gender: string;
   nationality: string;
   idType: string;
@@ -31,121 +32,156 @@ type PassportData = {
 };
 
 const RegisterPage: React.FC = () => {
-  const [step, setStep] = useState<Step>("verify-email");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
+
   const [userData, setUserData] = useState<FormData | null>(null);
   const [idPhotos, setIdPhotos] = useState<LicenseData | PassportData | null>(
     null
   );
 
+  const currentStep = (searchParams.get("step") as Step) || "verify-email";
+
   const { mutateAsync: verify, isPending } = useVerifyEmail();
+  const { mutateAsync: register, isPending: registerPending } =
+    useRegisterUser();
 
-  const handleVerify = async (value: { email: string }) => {
-    await verify(value);
-    setStep("register");
-  };
+  const goToStep = useCallback(
+    (step: Step) => {
+      setSearchParams({ step });
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    },
+    [setSearchParams]
+  );
 
-  const handleRegisterSubmit = (data: FormData) => {
-    setUserData(data);
-    setStep(data.idType === "License" ? "license" : "passport");
-  };
+  const handleVerify = useCallback(
+    async (value: { email: string }) => {
+      // await verify(value);
+      goToStep("register");
+    },
+    [goToStep]
+  );
 
-  const handleLicenseSubmit = (licenseData: LicenseData) => {
-    console.log("Collected License:", { ...userData, ...licenseData });
-    setIdPhotos(licenseData);
-    setStep("webcam");
-  };
+  const handleRegisterSubmit = useCallback(
+    async (data: FormData) => {
+      const dob = `${data.year.padStart(4, "0")}-${data.month.padStart(
+        2,
+        "0"
+      )}-${data.day.padStart(2, "0")}`;
 
-  const handlePassportSubmit = (passportData: PassportData) => {
-    console.log("Collected Passport:", { ...userData, ...passportData });
-    setIdPhotos(passportData);
-    setStep("webcam");
-  };
+      const payload = {
+        fullname: data.fullName,
+        verificationToken: "sfsddf",
+        dateOfBirth: dob,
+        genderId: parseInt(data.gender),
+        nationalityId: parseInt(data.nationality),
+        kycType: data.idType,
+        kycData: data.fullName, // Example placeholder
+      };
 
-  const handleFaceScanSubmit = (photoData: Blob) => {
-    console.log("FaceScan Blob:", photoData);
-    // Combine all data and maybe send to backend
-    const payload = {
-      userData,
-      idPhotos,
-      faceScanBlob: photoData,
-    };
-    console.log("🟢 Final payload ready:", payload);
-    // For now, we just log. Later you can trigger API or WebSocket send.
-  };
+      // await register(payload);
 
-  const getTitle = () => {
-    switch (step) {
-      case "verify-email":
-        return "Email Verify";
-      case "register":
-        return "Personal Details";
-      case "license":
-        return "Add Photo of Your License";
-      case "passport":
-        return "Add Photo of Your Passport";
-      case "webcam":
-        return "Verify with a Scan";
-      default:
-        return "";
-    }
-  };
+      setUserData(data);
+      goToStep(data.idType === "License" ? "license" : "passport");
+    },
+    [goToStep]
+  );
 
-  const getSubtitle = () => {
-    switch (step) {
-      case "verify-email":
-        return "Verify your email address";
-      case "webcam":
-        return "Turn your head left and right";
-      default:
-        return "Tell us about you";
-    }
-  };
+  const handleLicenseSubmit = useCallback(
+    (licenseData: LicenseData) => {
+      setIdPhotos(licenseData);
+      goToStep("webcam");
+    },
+    [goToStep]
+  );
+
+  const handlePassportSubmit = useCallback(
+    (passportData: PassportData) => {
+      setIdPhotos(passportData);
+      goToStep("webcam");
+    },
+    [goToStep]
+  );
+
+  const handleFaceScanSubmit = useCallback(
+    (photoData: Blob) => {
+      const payload = {
+        userData,
+        idPhotos,
+        faceScanBlob: photoData,
+      };
+      console.log("🟢 Final payload ready:", payload);
+    },
+    [userData, idPhotos]
+  );
+
+  /** ✅ Derived titles */
+  const titles = useMemo(
+    () => ({
+      "verify-email": "Email Verify",
+      register: "Personal Details",
+      license: "Add Photo of Your License",
+      passport: "Add Photo of Your Passport",
+      webcam: "Verify with a Scan",
+    }),
+    []
+  );
+
+  const subtitles = useMemo(
+    () => ({
+      "verify-email": "Verify your email address",
+      register: "Tell us about you",
+      license: "Tell us about you",
+      passport: "Tell us about you",
+      webcam: "Turn your head left and right",
+    }),
+    []
+  );
+
+  const title = titles[currentStep];
+  const subtitle = subtitles[currentStep];
 
   return (
     <div className="min-h-screen flex justify-center items-center">
       <div className="w-full max-w-[400px] text-black-pearl-700 md:bg-white md:rounded-lg md:shadow-lg p-5 mx-auto">
         <MobileHeader
-          title={getTitle()}
+          title={title}
           className="bg-transparent md:block p-0 text-black-pearl-700"
           isShowBackIcon={false}
         />
         <p className="text-xs sm:text-sm text-gray-500 mb-8 text-center">
-          {getSubtitle()}
+          {subtitle}
         </p>
 
-        {step === "verify-email" && (
+        {currentStep === "verify-email" && (
           <EmailVeriflyForm handleSubmit={handleVerify} isPending={isPending} />
         )}
 
-        {step === "register" && (
+        {currentStep === "register" && (
           <RegisterForm onSubmit={handleRegisterSubmit} />
         )}
 
-        {step === "license" && (
+        {currentStep === "license" && (
           <LicenseForm
             onSubmit={handleLicenseSubmit}
-            onBack={() => setStep("register")}
+            onBack={() => goToStep("register")}
           />
         )}
 
-        {step === "passport" && (
+        {currentStep === "passport" && (
           <PassportForm
             onSubmit={handlePassportSubmit}
-            onBack={() => setStep("register")}
+            onBack={() => goToStep("register")}
           />
         )}
 
-        {step === "webcam" && (
+        {currentStep === "webcam" && (
           <FaceScanForm
             onBack={() =>
-              userData?.idType === "License"
-                ? setStep("license")
-                : setStep("passport")
+              goToStep(userData?.idType === "License" ? "license" : "passport")
             }
             onSubmit={handleFaceScanSubmit}
-            onContinue={() => {
-              console.log("Continue pressed after scan.");
-            }}
+            onContinue={() => console.log("Continue pressed after scan")}
           />
         )}
       </div>
