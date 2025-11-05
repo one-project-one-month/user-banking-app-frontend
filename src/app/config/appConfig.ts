@@ -8,7 +8,7 @@ const getDynamicBaseUrl = () => {
   return (
     urlParam ||
     import.meta.env.VITE_BASE_URL ||
-    "https://banking-dummy-backend.onrender.com"
+    "https://banking-dummy-backend.onrender.com/personal-banking/api"
   );
 };
 
