@@ -32,9 +32,9 @@ function ProfileEditForm({ userInfo }: ProfileEditFormProps) {
       fullname: userInfo?.fullname ?? "",
       email: userInfo?.email ?? "",
       dateOfBirth: userInfo?.dateOfBirth ?? "",
-      genderId: userInfo?.gender.id ?? 1,
-      nationalityId: userInfo?.nationality.id ?? 1,
-      relationshipId: userInfo?.relationship.id ?? 1,
+      genderId: userInfo?.gender?.id ?? 1,
+      nationalityId: userInfo?.nationality?.id ?? 1,
+      relationshipId: userInfo?.relationship?.id ?? 1,
       address: userInfo?.address,
     },
   });

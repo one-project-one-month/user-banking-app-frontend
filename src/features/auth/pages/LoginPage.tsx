@@ -8,7 +8,7 @@ const LoginPage: React.FC = () => {
   const navigate = useNavigate();
 
   const handleRedirect = useCallback(() => {
-    navigate("/dashboard");
+    navigate("/");
   }, []);
 
   return (

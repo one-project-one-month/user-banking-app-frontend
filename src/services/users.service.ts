@@ -8,7 +8,10 @@ import type {
 
 export const changePassword = async (payload: ChangePasswordPayload) => {
   try {
-    const response = await API.post("/users/change-password", payload);
+    const response = await API.post(
+      "personal-banking/users/change-password",
+      payload
+    );
     return response.data;
   } catch (error) {
     throwError(error);
@@ -17,7 +20,7 @@ export const changePassword = async (payload: ChangePasswordPayload) => {
 
 export const getCurrentUser = async () => {
   try {
-    const response = await API.get("/users/me");
+    const response = await API.get("personal-banking/users/me");
     return response.data;
   } catch (error) {
     throwError(error);
@@ -26,7 +29,7 @@ export const getCurrentUser = async () => {
 
 export const getNicknameList = async () => {
   try {
-    const response = await API.get("/users/nickname");
+    const response = await API.get("personal-banking/users/nickname");
     return response.data;
   } catch (error) {
     throwError(error);
@@ -65,7 +68,7 @@ export const deleteNickname = async (id: number) => {
 
 export const getFromAccounts = async () => {
   try {
-    const response = await API.get("/users/from-accounts");
+    const response = await API.get("personal-banking/users/from-accounts");
     return response.data;
   } catch (error) {
     throwError(error);
@@ -74,7 +77,9 @@ export const getFromAccounts = async () => {
 
 export const switchAccount = async (accountId: number) => {
   try {
-    const response = await API.post("/users/switch-account", { accountId });
+    const response = await API.post("personal-banking/users/switch-account", {
+      accountId,
+    });
     return response.data;
   } catch (error) {
     throwError(error);
