@@ -1,21 +1,17 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { register } from "../hooks/authReducer";
-import type { AppDispatch } from "../../../app/store/store";
-import { errorToast, successToast } from "@/lib/helper/customToasts";
 
-import FormSelectInput from "@/components/common/form-inputs/FormSelectInput";
-import FormTextInput from "@/components/common/form-inputs/FormTextInput";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { RadioGroup } from "@/components/ui/radio-group";
 import { Form } from "@/components/ui/form";
+import FormSelectInput from "@/components/common/form-inputs/FormSelectInput";
+import FormTextInput from "@/components/common/form-inputs/FormTextInput";
+import { RadioGroup } from "@/components/ui/radio-group";
+import type { PersonalDetailPayload } from "@/types/Auth";
+import { useGetTemplates } from "@/queries/auth.query";
 
-// 🧩 Zod Schema
 const registerSchema = z.object({
   fullName: z.string().min(1, "Full name is required"),
   genderId: z.string().min(1, "Gender is required"),
@@ -58,12 +54,12 @@ const nationalities = [
 
 const idTypes = ["License", "Passport"];
 
-const RegisterForm = () => {
-  const dispatch = useDispatch<AppDispatch>();
-  const navigate = useNavigate();
-  const { isLoading } = useSelector((state: any) => state.auth);
+type RegisterFormProps = {
+  onSubmit: (data: PersonalDetailPayload) => void;
+  isLoading?: boolean;
+};
 
-  // 🧠 integrate Zod with React Hook Form
+const RegisterForm = ({ onSubmit, isLoading }: RegisterFormProps) => {
   const form = useForm<FormValues>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -76,41 +72,37 @@ const RegisterForm = () => {
       day: "",
     },
   });
-
-  const { handleSubmit, register: formRegister, formState } = form;
+  const { register: formRegister, formState } = form;
   const { errors } = formState;
 
-  const onSubmit = (data: FormValues) => {
+  const { data: templates, isLoading: isTemplateLoading } = useGetTemplates();
+
+  const handleSubmitForm = (data: FormValues) => {
     const { year, month, day } = data;
     const dob = `${year.padStart(4, "0")}-${month.padStart(
       2,
       "0"
     )}-${day.padStart(2, "0")}`;
 
-    const payload = {
+    const payload: PersonalDetailPayload = {
+      verificationToken: "",
       fullname: data.fullName,
       dateOfBirth: dob,
-      genderId: parseInt(data.genderId),
-      nationalityId: parseInt(data.nationalityId),
+      genderId: Number(data.genderId),
+      nationalityId: Number(data.nationalityId),
       kycType: data.idType,
-      kycData: data.fullName, // Example placeholder
+      kycData: "",
     };
 
-    dispatch(register(payload))
-      .unwrap()
-      .then((user: any) => {
-        successToast("Success", `Registered new user - ${user.name}`);
-        navigate("/");
-      })
-      .catch((err: any) => {
-        errorToast("Failed", "Registration failed. Please try again.");
-        console.error(err);
-      });
+    onSubmit(payload);
   };
 
   return (
     <Form {...form}>
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
+      <form
+        onSubmit={form.handleSubmit(handleSubmitForm)}
+        className="flex flex-col gap-3"
+      >
         <FormTextInput
           name="fullName"
           label="Full Name"
@@ -121,7 +113,6 @@ const RegisterForm = () => {
           labelClass="text-black-pearl-700"
         />
 
-        {/* Date of Birth */}
         <div>
           <Label className="font-medium mb-2">Date of Birth</Label>
           <div className="flex gap-2">
@@ -158,7 +149,11 @@ const RegisterForm = () => {
           label="Gender"
           placeholder="Choose your gender"
           form={form}
-          options={genders}
+          options={
+            templates?.genderOptions?.map((t) => {
+              return { label: t.name, value: t.id };
+            }) ?? []
+          }
           wrapperClass="mb-4"
           className="py-6"
         />
@@ -168,19 +163,20 @@ const RegisterForm = () => {
           label="Nationality"
           placeholder="Select your nationality"
           form={form}
-          options={nationalities}
+          options={
+            templates?.nationalityOptions?.map((t) => {
+              return { label: t.name, value: t.id };
+            }) ?? []
+          }
           wrapperClass="mb-4"
           className="py-6"
         />
 
-        {/* ID Type as Radio Input */}
         <div>
           <RadioGroup
             label="ID Type"
             onChange={(val) => form.setValue("idType", val)}
             value={form.watch("idType")}
-            // className="flex gap-6
-
             options={idTypes}
           />
           {errors.idType && (

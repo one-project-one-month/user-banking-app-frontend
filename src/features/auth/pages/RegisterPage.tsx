@@ -1,15 +1,25 @@
 import React, { useCallback, useMemo, useState } from "react";
-import { useSearchParams, useNavigate } from "react-router-dom";
-
 import RegisterForm from "../components/RegisterForm";
 import LicenseForm from "../components/LicenseUpload";
 import PassportForm from "../components/PassportForm";
 import FaceScanForm from "../components/FaceScanForm";
 import EmailVeriflyForm from "../components/EmailVeriflyForm";
 import MobileHeader from "@/components/core/MobileHeader";
-import { useRegisterUser, useVerifyEmail } from "@/queries/auth.query";
+import {
+  useRegisterUser,
+  useVerifyEmail,
+  useVerifyOTP,
+} from "@/queries/auth.query";
+import OtpVerifyForm from "../components/OTPVerifyForm";
+import type { PersonalDetailPayload } from "@/types/Auth";
 
-type Step = "verify-email" | "register" | "license" | "passport" | "webcam";
+type Step =
+  | "verify-email"
+  | "otp-verify"
+  | "register"
+  | "license"
+  | "passport"
+  | "webcam";
 
 type FormData = {
   fullName: string;
@@ -32,59 +42,51 @@ type PassportData = {
 };
 
 const RegisterPage: React.FC = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const navigate = useNavigate();
+  const [currentStep, setCurrentStep] = useState<Step>("verify-email");
+  const [token, setToken] = useState<string | null>(null);
 
   const [userData, setUserData] = useState<FormData | null>(null);
   const [idPhotos, setIdPhotos] = useState<LicenseData | PassportData | null>(
     null
   );
 
-  const currentStep = (searchParams.get("step") as Step) || "verify-email";
-
   const { mutateAsync: verify, isPending } = useVerifyEmail();
+  const { mutateAsync: verifyOTP } = useVerifyOTP();
   const { mutateAsync: register, isPending: registerPending } =
     useRegisterUser();
 
-  const goToStep = useCallback(
-    (step: Step) => {
-      setSearchParams({ step });
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    },
-    [setSearchParams]
-  );
+  const goToStep = useCallback((step: Step) => {
+    setCurrentStep(step);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
 
   const handleVerify = useCallback(
     async (value: { email: string }) => {
-      // await verify(value);
+      const res = await verify(value);
+      const res2 = await verifyOTP({ email: value.email, otp: res?.data });
+      console.log(res2);
+      setToken(res2?.data?.verificationToken);
+      console.log(token);
       goToStep("register");
     },
     [goToStep]
   );
 
+  // const handleOtpVerify = useCallback(
+  //   async (data: { otp: string }) => {
+  //     const res = await verifyOTP({ email: email ?? "", otp: data.otp });
+  //     setToken(res?.data?.verificationToken ?? "");
+  //     goToStep("register");
+  //   },
+  //   [goToStep]
+  // );
+
   const handleRegisterSubmit = useCallback(
-    async (data: FormData) => {
-      const dob = `${data.year.padStart(4, "0")}-${data.month.padStart(
-        2,
-        "0"
-      )}-${data.day.padStart(2, "0")}`;
-
-      const payload = {
-        fullname: data.fullName,
-        verificationToken: "sfsddf",
-        dateOfBirth: dob,
-        genderId: parseInt(data.gender),
-        nationalityId: parseInt(data.nationality),
-        kycType: data.idType,
-        kycData: data.fullName, // Example placeholder
-      };
-
-      // await register(payload);
-
-      setUserData(data);
-      goToStep(data.idType === "License" ? "license" : "passport");
+    async (data: PersonalDetailPayload) => {
+      await register({ ...data, verificationToken: token ?? "" });
+      goToStep(data.kycType === "License" ? "license" : "passport");
     },
-    [goToStep]
+    [goToStep, token]
   );
 
   const handleLicenseSubmit = useCallback(
@@ -115,10 +117,10 @@ const RegisterPage: React.FC = () => {
     [userData, idPhotos]
   );
 
-  /** ✅ Derived titles */
   const titles = useMemo(
     () => ({
       "verify-email": "Email Verify",
+      "otp-verify": "OTP Verification",
       register: "Personal Details",
       license: "Add Photo of Your License",
       passport: "Add Photo of Your Passport",
@@ -130,6 +132,7 @@ const RegisterPage: React.FC = () => {
   const subtitles = useMemo(
     () => ({
       "verify-email": "Verify your email address",
+      "otp-verify": "Enter the code sent to your email",
       register: "Tell us about you",
       license: "Tell us about you",
       passport: "Tell us about you",
@@ -157,8 +160,19 @@ const RegisterPage: React.FC = () => {
           <EmailVeriflyForm handleSubmit={handleVerify} isPending={isPending} />
         )}
 
+        {/* {currentStep === "otp-verify" && (
+          <OtpVerifyForm
+            onSubmit={handleOtpVerify}
+            otp={otp}
+            isLoading={isVerifyOTPPending}
+          />
+        )} */}
+
         {currentStep === "register" && (
-          <RegisterForm onSubmit={handleRegisterSubmit} />
+          <RegisterForm
+            onSubmit={handleRegisterSubmit}
+            isLoading={registerPending}
+          />
         )}
 
         {currentStep === "license" && (
