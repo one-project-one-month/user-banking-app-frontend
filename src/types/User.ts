@@ -24,10 +24,10 @@ export type AccountDetail = {
 };
 
 export type UserDetail = {
-  info: UserInfo;
-  accountDetail: AccountDetail;
-  accessToken: string;
-  refreshToken: string;
+  username: string;
+  email: string;
+  currentBalance: number;
+  selectedAccountDetail: AccountDetail;
 };
 
 export type UserDetailResponse = BaseResponse<UserDetail>;

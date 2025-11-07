@@ -71,7 +71,7 @@ function ProfileAccountSwitchBox({ className }: Props) {
               {options.map((opt) => (
                 <CommandItem
                   key={opt.id}
-                  value={String(opt.id)}
+                  value={String(opt.accountNumber)}
                   onSelect={handleSelect}
                 >
                   <div className="flex flex-col">

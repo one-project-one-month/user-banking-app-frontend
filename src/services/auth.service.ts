@@ -8,7 +8,7 @@ import type {
 
 export const verifyEmail = async (data: { email: string }) => {
   try {
-    const res = await API.post("/auth/register/email/verify", data);
+    const res = await API.post("api/auth/register/email/verify", data);
     return res.data;
   } catch (err) {
     throwError(err);
@@ -17,7 +17,7 @@ export const verifyEmail = async (data: { email: string }) => {
 
 export const registerUser = async (data: PersonalDetailPayload) => {
   try {
-    const res = await API.post("/auth/register/personal-details", data);
+    const res = await API.post("api/auth/register/personal-details", data);
     return res.data;
   } catch (err) {
     throwError(err);
@@ -28,7 +28,25 @@ export const loginUser = async (
   data: LoginPayload
 ): Promise<LoginResponse | undefined> => {
   try {
-    const res = await API.post("/auth/login", data);
+    const res = await API.post("api/auth/login", data);
+    return res.data;
+  } catch (err) {
+    throwError(err);
+  }
+};
+
+export const verifyOTP = async (data: { email: string; otp: string }) => {
+  try {
+    const res = await API.post("api/auth/register/otp/verify", data);
+    return res.data;
+  } catch (err) {
+    throwError(err);
+  }
+};
+
+export const getTemplate = async () => {
+  try {
+    const res = await API.get("api/auth/register/personal-details/template");
     return res.data;
   } catch (err) {
     throwError(err);
