@@ -19,7 +19,7 @@ API.interceptors.request.use(
   (config) => {
     const token = Cookies.get("accessToken");
     if (token) {
-      config.headers.Authorization = `JWT ${token}`;
+      config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },

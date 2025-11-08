@@ -35,9 +35,9 @@ function ProfilePage() {
         )}
         <SettingProfileSection
           isEdit
-          name={info.fullname}
-          accountNumber={accountDetail.accountNumber}
-          balance={accountDetail.currentBalance}
+          name={info?.username}
+          accountNumber={accountDetail?.accountNumber}
+          balance={info?.currentBalance}
         />
         <ProfileInfoSection user={info} />
       </div>
