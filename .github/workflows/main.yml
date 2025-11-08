@@ -1,0 +1,43 @@
+name: Frontend CI
+
+on:
+  push:
+    branches:
+      - 'ft/*'
+      - 'Comflict/Check'
+      - 'development'
+      - 'update/*'
+  pull_request:
+    types: [opened, reopened, synchronize, merge, closed]
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5.0.0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci #This command ensures that the exact versions specified in package-lock.json are installed
+
+      - name: Build the application
+        run: npm run build
+
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v5.0.0
+        with:
+          name: dist
+          path: dist
+
+
+
+
+
