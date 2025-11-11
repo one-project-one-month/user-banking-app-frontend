@@ -60,7 +60,7 @@ jobs:
       - name: Build and push Docker image
         env:
           ECR_REGISTRY: 730335566159.dkr.ecr.us-east-1.amazonaws.com
-          ECR_REPOSITORY: userbanking/frontend11
+          ECR_REPOSITORY: user-banking/frontend11
           IMAGE_TAG: ${{ github.sha }}
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
