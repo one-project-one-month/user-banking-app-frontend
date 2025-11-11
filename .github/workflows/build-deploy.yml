@@ -60,7 +60,7 @@ jobs:
       - name: Build and push Docker image
         env:
           ECR_REGISTRY: 730335566159.dkr.ecr.us-east-1.amazonaws.com
-          ECR_REPOSITORY: userbanking/frontend
+          ECR_REPOSITORY: userbanking/frontend11
           IMAGE_TAG: ${{ github.sha }}
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
@@ -68,4 +68,4 @@ jobs:
 
       - name: Deploy to S3
         run: |
-          aws s3 sync dist s3://user-banking-app/ --delete
+          aws s3 sync dist s3://user-banking-app11/ --delete
