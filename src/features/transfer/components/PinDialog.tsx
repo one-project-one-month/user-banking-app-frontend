@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useEffect, useCallback } from "react"
 import {
   Dialog,
   DialogTrigger,
@@ -9,33 +9,54 @@ import {
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Delete, LockKeyhole } from "lucide-react"
+import { useDispatch, useSelector } from "react-redux"
+import type { RootState } from "@/app/store/store"
+import { setPin } from "../redux/accountTransferSlice"
+import { errorToast } from "@/lib/helper/customToasts"
+import { useTransferConfirm } from "@/queries/transfer.query"
+import PageLoading from "@/components/core/PageLoading"
 
 export function PinDialog() {
-  const [pin, setPin] = useState("")
+  const dispatch = useDispatch()
+ 
 
+  const pin = useSelector((state: RootState) => state.transfer.pin);
+  const amount = useSelector((state: RootState) => state.transfer.amount);
+  const note = useSelector((state: RootState) => state.transfer.note);
+  const toAccountId = useSelector((state: RootState) => state.transfer.toAccountId);
+  const  isLoading  =useTransferConfirm();
+   const { mutate } = useTransferConfirm();
   const handleDigitClick = (digit: string) => {
-    if (pin.length < 6) {
-      setPin((prev) => prev + digit)
+      if ( pin.length < 6) {
+      dispatch(setPin(pin + digit))
     }
+    
   }
 
   const handleBackspace = () => {
-    setPin((prev) => prev.slice(0, -1))
+    dispatch(setPin(pin.slice(0, -1)))
   }
 
-  const handleSubmit = () => {
-    console.log("Entered PIN:", pin)
-    // You can trigger your own logic here (e.g., API call, close dialog, etc.)
+const submitTransfer = useCallback(() => {
+  if (toAccountId === null) {
+    return errorToast("Recipient missing", "Please select a recipient account");
   }
 
-  // Automatically submit when PIN reaches 6 digits
-  useEffect(() => {
-    if (pin.length === 6) {
-      handleSubmit()
-    }
-  }, [pin])
+  mutate({
+    amount: Number(amount),
+    toAccountId,
+    note,
+    pin,
+  });
+  console.log(toAccountId,amount,note,pin)
+}, [toAccountId, pin, amount, note, mutate]); 
 
-  // ✅ No "enter" key here
+useEffect(() => {
+  if (pin.length === 6) {
+    submitTransfer(); 
+  }
+}, [pin, submitTransfer]);
+
   const keypad = [
     "1", "2", "3",
     "4", "5", "6",
@@ -54,8 +75,10 @@ export function PinDialog() {
         <Button className="w-full">Confirm</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[400px]">
-        <DialogHeader>
-          <DialogTitle className="text-center flex justify-center items-center my-3">
+
+               <DialogHeader>
+          <DialogTitle className="text-center flex flex-col justify-center gap-3 items-center my-3">
+            {pin.length === 6 ? isLoading && <PageLoading/> : <span></span>}
             <LockKeyhole className="bg-blue-900 text-white rounded-md w-12 h-12 p-3" />
           </DialogTitle>
           <DialogDescription className="text-center text-gray-500">
@@ -63,12 +86,10 @@ export function PinDialog() {
           </DialogDescription>
         </DialogHeader>
 
-        {/* PIN display */}
         <div className="text-center text-2xl font-mono border p-3 rounded bg-gray-100 dark:bg-gray-800 tracking-widest">
           {pin.padEnd(6, "•")}
         </div>
 
-        {/* Keypad */}
         <div className="grid grid-cols-6 gap-3 mt-4">
           {keypad.slice(0, 9).map((key) => (
             <Button

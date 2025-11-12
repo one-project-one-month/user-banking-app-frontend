@@ -1,6 +1,7 @@
 import { ChevronRight } from "lucide-react";
 import FavouriteCard from "./FavouriteCard";
 import FavouriteCardContainer from "./FavouriteCardContainer";
+import { useGetNicknameList } from "@/queries/users.query";
 
 function FavouriteList() {
   return (

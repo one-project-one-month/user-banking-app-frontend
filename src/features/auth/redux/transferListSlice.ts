@@ -24,20 +24,7 @@ export const transferListSlice = createSlice({
       state.transferLists = dummyTransfers; //dummy
     },
   },
-  // extraReducers : builder =>{
-  //   builder
-  //   .addCase(fetchTransferLists.pending,(state)=>{
-  //     state.loading = true
-  //   })
-  //   .addCase(fetchTransferLists.fulfilled,(state,action)=>{
-  //     state.loading = false
-  //     state.transferLists = action.payload
-  //   })
-  //   .addCase(fetchTransferLists.rejected,(state,action)=>{
-  //     state.loading = false
-  //     state.error = action.error.message || "Failed to fetch transfer lists"
-  //   })
-  // }
+
 })
 export const { loadDummyTransfers } = transferListSlice.actions; //dummy
 

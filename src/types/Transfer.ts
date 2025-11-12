@@ -40,3 +40,10 @@ export interface AccountTransferResponse{
     userDetails : UserWithFullName
   }
 }
+
+export type TransferPayload ={
+  toAccountId: number,
+  amount: number,
+  note: string,
+  pin: string
+}

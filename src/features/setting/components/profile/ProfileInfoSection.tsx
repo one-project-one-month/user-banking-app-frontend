@@ -14,7 +14,7 @@ function ProfileInfoSection({ user }: ProfileInfoSectionProps) {
       { label: "Date of Birth", value: user.dateOfBirth },
       { label: "Gender", value: user.gender?.name },
       { label: "Nationality", value: user.nationality?.name },
-      { label: "Phone Number", value: user.phoneNumber },
+      { label: "Phone Number", value: user?.phoneNumber },
       { label: "Relationship", value: user.relationship?.name },
       { label: "Address", value: user.address },
     ],

@@ -20,14 +20,14 @@ export type UserInfo = {
 export type AccountDetail = {
   id: number;
   accountNumber: string;
-  currentBalance: number;
+  balance: number;
 };
 
 export type UserDetail = {
   username: string;
   email: string;
   currentBalance: number;
-  selectedAccountDetail: AccountDetail;
+  selectedAccountDetails: AccountDetail;
 };
 
 export type UserDetailResponse = BaseResponse<UserDetail>;

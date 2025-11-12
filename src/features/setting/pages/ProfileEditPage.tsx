@@ -28,7 +28,7 @@ function ProfileEditPage() {
           title="Profile"
           description="Manage your photo and personal information."
         />
-      )}
+      )}  
       <SettingProfileSection
         isEdit
         name={info?.username}
