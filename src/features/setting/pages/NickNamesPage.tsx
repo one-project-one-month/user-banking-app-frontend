@@ -6,7 +6,6 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import NickNamesForm from "../components/nickname/NickNamesForm";
 import useNickNameUIAction from "../hooks/useNickNameUIAction";
 import { useGetNicknameList } from "@/queries/users.query";
-import { dummyNickname } from "@/app/constants/dummyData";
 
 function NickNamesPage() {
   const {
@@ -21,7 +20,7 @@ function NickNamesPage() {
 
   const { data: nicknames, isLoading } = useGetNicknameList();
 
-  const nicknameData = nicknames?.data ?? [];
+  const nicknameData = nicknames?.data.nicknameOptions ?? [];
 
   return (
     <main className="h-full md:h-auto text-black-pearl-700 flex flex-col justify-between md:block md:p-2 md:max-w-4xl gap-5 bg-white">

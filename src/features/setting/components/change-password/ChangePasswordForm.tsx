@@ -9,6 +9,7 @@ import FormTextInput from "@/components/common/form-inputs/FormTextInput";
 import { useChangePassword } from "@/queries/users.query";
 import type { ChangePasswordPayload } from "@/types/User";
 import Spinner from "@/components/common/Spinner";
+import { errorToast } from "@/lib/helper/customToasts";
 
 const ChangePasswordSchema = z
   .object({
@@ -42,6 +43,15 @@ function ChangePasswordForm() {
   const { mutate: changePassword, isPending } = useChangePassword();
 
   const onSubmit = (values: ChangePasswordValues) => {
+    if (values.currentPassword === values.newPassword) {
+      errorToast(
+        "Password Unchanged",
+        "Your new password cannot be the same as your current one."
+      );
+
+      return;
+    }
+
     const payload: ChangePasswordPayload = {
       oldPassword: values.currentPassword,
       newPassword: values.newPassword,

@@ -1,9 +1,16 @@
+import Spinner from "@/components/common/Spinner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Send } from "lucide-react";
 import { useState } from "react";
 
-function ChatInput({ sendMessage }: { sendMessage: (msg: string) => void }) {
+function ChatInput({
+  sendMessage,
+  isLoading = false,
+}: {
+  sendMessage: (msg: string) => void;
+  isLoading?: boolean;
+}) {
   const [input, setInput] = useState("");
 
   const handleSend = () => {
@@ -29,9 +36,13 @@ function ChatInput({ sendMessage }: { sendMessage: (msg: string) => void }) {
         }}
         placeholder="Enter texts"
       />
-      <Button onClick={handleSend} className="rounded-full h-12 w-12">
-        <Send />
-      </Button>
+      {isLoading ? (
+        <Spinner />
+      ) : (
+        <Button onClick={handleSend} className="rounded-full h-12 w-12">
+          <Send />
+        </Button>
+      )}
     </div>
   );
 }

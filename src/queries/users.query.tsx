@@ -1,5 +1,6 @@
 import { errorToast, successToast } from "@/lib/helper/customToasts";
 import {
+  autoSaveReceipt,
   changePassword,
   createNickname,
   deleteNickname,
@@ -7,8 +8,11 @@ import {
   getFromAccounts,
   getNicknameList,
   mediaUpload,
+  setPin,
   switchAccount,
+  updateCurrentUser,
   updateNickname,
+  verifyPin,
 } from "@/services/users.service";
 import type {
   UserDetailResponse,
@@ -17,6 +21,7 @@ import type {
   NicknameEditPayload,
   NicknameCreatePayload,
   SwitchAccountsResponse,
+  UserUpdatePayload,
 } from "@/types/User";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
@@ -32,10 +37,38 @@ export const useChangePassword = () => {
   });
 };
 
+export const useAutoSaveReceipt = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (flag: boolean) => autoSaveReceipt(flag),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["me"] });
+    },
+    onError: (error) => {
+      errorToast("Failed to switch", error.message);
+    },
+  });
+};
+
 export const useGetCurrentUser = () => {
   return useQuery<UserDetailResponse>({
     queryKey: ["me"],
     queryFn: getCurrentUser,
+  });
+};
+
+export const useUpdateUser = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data: UserUpdatePayload) => updateCurrentUser(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["me"] });
+      successToast("Success", "User info updated successfully");
+    },
+    onError: (error) => {
+      errorToast("Error", error.message);
+    },
   });
 };
 
@@ -122,6 +155,30 @@ export const useMediaUpload = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["me"] });
       successToast("Success", "Media uploaded successfully.");
+    },
+    onError: (error) => {
+      errorToast("Failed", error.message);
+    },
+  });
+};
+
+export const useVerifyPin = () => {
+  return useMutation({
+    mutationFn: (data: { oldPin: string }) => verifyPin(data),
+    onSuccess: () => {
+      successToast("Success", "verified");
+    },
+    onError: (error) => {
+      errorToast("Failed", error.message);
+    },
+  });
+};
+
+export const useSetPin = () => {
+  return useMutation({
+    mutationFn: (data: { pin: string }) => setPin(data),
+    onSuccess: () => {
+      successToast("Success", "Pin changed successfully");
     },
     onError: (error) => {
       errorToast("Failed", error.message);

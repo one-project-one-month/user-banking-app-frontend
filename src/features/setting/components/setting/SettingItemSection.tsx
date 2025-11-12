@@ -1,3 +1,4 @@
+import ConfirmDialog from "@/components/common/ConfirmDialog";
 import {
   Select,
   SelectContent,
@@ -9,7 +10,11 @@ import { Switch } from "@/components/ui/switch";
 import { LogOut } from "lucide-react";
 import { Link } from "react-router-dom";
 
-function SettingItemSection() {
+type SettingItemSectionProps = {
+  handleLogout: () => void;
+};
+
+function SettingItemSection({ handleLogout }: SettingItemSectionProps) {
   return (
     <section className="flex flex-col gap-3 w-full">
       <div className="flex justify-between items-center w-full border rounded-lg p-3">
@@ -43,12 +48,17 @@ function SettingItemSection() {
       <Link to="/settings/nicknames" className="w-full border rounded-lg p-3">
         Nickname
       </Link>
-      <Link
-        to=""
-        className="w-full flex items-center gap-2 border rounded-lg p-3 "
-      >
-        <LogOut className="text-red-700" /> <span>Log Out</span>
-      </Link>
+      <ConfirmDialog
+        title="Are you sure?"
+        description="This action cannot be undone."
+        actionLabel="Logout"
+        onConfirm={handleLogout}
+        trigger={
+          <div className="w-full flex items-center gap-2 border rounded-lg p-3 ">
+            <LogOut className="text-red-700" /> <span>Log Out</span>
+          </div>
+        }
+      />
     </section>
   );
 }
