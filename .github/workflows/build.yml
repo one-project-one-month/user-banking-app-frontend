@@ -102,7 +102,7 @@ jobs:
           severity: 'CRITICAL,HIGH'
 
       - name: Push Docker image to ECR
-        run: docker push $IMAGE_URI
+        run: docker push ${{ steps.build-image.outputs.image_uri }}
 
       - name: Deploy to S3
         run: |
