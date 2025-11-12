@@ -31,6 +31,15 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Cache npm dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: npm-cache-${{ github.sha }}
+          restore-keys: |
+            npm-cache-${{ github.ref_name }}-
+            npm-restore
+
       - name: Build the application
         run: npm run build
 
