@@ -8,7 +8,7 @@ export const generateRecieveQR = async (data: {
 }): Promise<QRResponse | undefined> => {
   try {
     const response = await API.post(
-      "personal-banking/scan/qr-to-recieve/generate",
+      "personal-banking/scan/qr-to-receive/generate",
       {
         amount: data.amount,
         note: data.note ?? "",
@@ -22,10 +22,7 @@ export const generateRecieveQR = async (data: {
 
 export const generateQRToPay = async (data: GenerateQRToPayPayload) => {
   try {
-    const response = await API.post(
-      "personal-banking/scan/qr-to-pay/generate",
-      data
-    );
+    const response = await API.post("personal-banking/scan/qr-to-pay/generate");
     return response.data;
   } catch (error) {
     throwError(error);

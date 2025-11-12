@@ -22,21 +22,18 @@ export default function MobileHeader({
   return (
     <div
       className={cn(
-        "relative w-full mb-2 md:hidden py-[10px] px-[32px] text-white",
+        "flex justify-start items-center w-full mb-2 md:hidden py-[10px]",
         className
       )}
     >
-      <h1 className={cn("text-center text-2xl font-semibold", titleClassName)}>
-        {title}
-      </h1>
       {isShowBackIcon && (
-        <Link
-          to={backTo}
-          className="absolute left-[32px] top-0 bottom-0 m-auto h-fit"
-        >
+        <Link to={backTo} className=" h-fit">
           <ChevronLeft size={iconSize} />
         </Link>
       )}
+      <h1 className={cn("text-center text-2xl font-semibold", titleClassName)}>
+        {title}
+      </h1>
     </div>
   );
 }
