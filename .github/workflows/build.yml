@@ -85,13 +85,15 @@ jobs:
           ECR_REPOSITORY: user-banking/frontend11
           IMAGE_TAG: ${{ github.sha }}
         run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          IMAGE_URI=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          docker build -t $IMAGE_URI .
+          echo "image_uri=$IMAGE_URI" >> $GITHUB_OUTPUT
           
 
       - name: Scan Docker image with Trivy
         uses: aquasecurity/trivy-action@0.28.0
         with:
-          image-ref: 730335566159.dkr.ecr.us-east-1.amazonaws.com/user-banking/frontend11:${{ github.sha }}
+          image-ref: ${{ steps.build-image.outputs.image_uri }}
           format: 'table'
           exit-code: '0'
           ignore-unfixed: true
