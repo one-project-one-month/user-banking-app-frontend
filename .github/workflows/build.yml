@@ -47,6 +47,16 @@ jobs:
       - name: Build the application
         run: npm run build
 
+      - name: Scan build artifacts for vulnerabilities
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          scan-type: 'fs'
+          name: 'dist'
+          path: '.'
+          format: 'table'
+          exit-code: '0'
+          severity: 'CRITICAL,HIGH'
+
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v5.0.0
         with:
@@ -59,6 +69,19 @@ jobs:
           name: dist
           path: .
 
+      - name: Build Docker image
+        run: docker build -t userbanking-frontend11:${{ github.sha }} .
+
+      - name: Scan Docker image with Trivy
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: userbanking-frontend11:${{ github.sha }}
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'
+
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v5.1.0
         with:
@@ -69,13 +92,26 @@ jobs:
       - name: Amazon ECR Login
         uses: aws-actions/amazon-ecr-login@v2.0.1
 
+      - name: Build an image from Dockerfile
+        run: docker build -t userbanking-frontend11:${{ github.sha }} .
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: userbanking-frontend11:${{ github.sha }}
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'
+
       - name: Build and push Docker image
         env:
           ECR_REGISTRY: 730335566159.dkr.ecr.us-east-1.amazonaws.com
           ECR_REPOSITORY: user-banking/frontend11
           IMAGE_TAG: ${{ github.sha }}
         run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          #docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker tag userbanking-frontend11:${IMAGE_TAG} $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
       - name: Deploy to S3
