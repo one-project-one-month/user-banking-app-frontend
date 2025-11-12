@@ -80,6 +80,7 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v2.0.1
 
       - name: Build Docker image
+        id: build-image
         env:
           ECR_REGISTRY: 730335566159.dkr.ecr.us-east-1.amazonaws.com
           ECR_REPOSITORY: user-banking/frontend11
