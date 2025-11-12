@@ -10,7 +10,7 @@ COPY . .
 RUN npm run build 
 
 
-FROM nginx:1.25.2-alpine
+FROM nginx:1.25.2-alpine3.20
 COPY nginx_config/nginx.conf /etc/nginx/nginx.conf
 COPY nginx_config/default.conf /etc/nginx/conf.d/default.conf
 #COPY --from=builder dist /etc/nginx/html
