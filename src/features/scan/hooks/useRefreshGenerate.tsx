@@ -1,5 +1,5 @@
 import { useGenerateQRToPayQR } from "@/queries/scan.query";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 
 function useRefreshGenerate(limit: number) {
   const [timeleft, setTimeleft] = useState(limit);
@@ -9,19 +9,20 @@ function useRefreshGenerate(limit: number) {
   const { mutateAsync: generate, isPending: isPendingGenerate } =
     useGenerateQRToPayQR();
 
-  const refresh = async () => {
+  const refresh = useCallback(async () => {
     if (isRefreshingRef.current) return;
 
     isRefreshingRef.current = true;
     try {
       const res = await generate({ fromAccountId: 0 });
-      setQrToken(res.data.token ?? "API မရတာ backend ပါ။");
-    } finally {
-      // restart countdown
+      setQrToken(res.data.token);
       setTimeleft(limit);
+    } catch (error) {
+      console.error("QR generation failed:", error);
+    } finally {
       isRefreshingRef.current = false;
     }
-  };
+  }, [generate, limit]);
 
   useEffect(() => {
     refresh();
@@ -30,19 +31,19 @@ function useRefreshGenerate(limit: number) {
       setTimeleft((prev) => {
         if (prev <= 1) {
           refresh();
-          return 0;
+          return limit;
         }
         return prev - 1;
       });
     }, 1000);
 
     return () => clearInterval(id);
-  }, [limit]);
+  }, [refresh, limit]);
 
   return {
     qrToken,
     timeleft,
-    isPending: isPendingGenerate || isRefreshingRef.current,
+    isPending: isPendingGenerate,
   };
 }
 

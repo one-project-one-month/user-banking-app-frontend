@@ -35,11 +35,12 @@ function ProfilePage() {
         )}
         <SettingProfileSection
           isEdit
-          name={info?.username}
+          name={info?.fullname}
           accountNumber={accountDetail?.accountNumber}
           balance={info?.currentBalance}
+          className="mb-5"
         />
-        <ProfileInfoSection user={info} />
+        <ProfileInfoSection user={info ?? null} />
       </div>
       <Button className="w-full py-5 my-3 md:max-w-40 md:float-end" asChild>
         <Link to="/settings/profile/edit">Edit</Link>

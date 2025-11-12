@@ -22,10 +22,12 @@ type QRToRecieveAmountSetupFormProps = {
     amount: number;
     note?: string;
   }) => Promise<void>;
+  loading?: boolean;
 };
 
 function QRToRecieveAmountSetupForm({
   handleDialogOnGenerate,
+  loading,
 }: QRToRecieveAmountSetupFormProps) {
   const form = useForm<QRReceiveAmountFormValue>({
     resolver: zodResolver(QRReceiveAmountSchema),
@@ -86,7 +88,7 @@ function QRToRecieveAmountSetupForm({
             >
               Go Back
             </Button>
-            <Button type="submit" className="py-5 w-full">
+            <Button type="submit" disabled={loading} className="py-5 w-full">
               Generate QR
             </Button>
           </div>

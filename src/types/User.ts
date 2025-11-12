@@ -12,9 +12,13 @@ export type UserInfo = {
   dateOfBirth: string;
   gender: Tempelate;
   nationality: Tempelate;
+  isPolicyAgreement: boolean;
+  isAutoSaveReceipt: boolean;
   phoneNumber: string;
   relationship: Tempelate;
+  currentBalance: number;
   address: string;
+  selectedAccountDetails: AccountDetail;
 };
 
 export type AccountDetail = {
@@ -30,7 +34,16 @@ export type UserDetail = {
   selectedAccountDetail: AccountDetail;
 };
 
-export type UserDetailResponse = BaseResponse<UserDetail>;
+export type UserDetailResponse = BaseResponse<UserInfo>;
+
+export type UserUpdatePayload = {
+  fullname: string;
+  dateOfBirth: string;
+  genderId: number;
+  nationalityId: number;
+  phoneNumber: string;
+  address: string;
+};
 
 export type Nickname = {
   id: number;
@@ -41,7 +54,11 @@ export type Nickname = {
   };
 };
 
-export type NicknameListResponse = BaseResponse<Nickname[]>;
+export type NicknameOptions = {
+  nicknameOptions: Nickname[];
+};
+
+export type NicknameListResponse = BaseResponse<NicknameOptions>;
 
 export type NicknameEditPayload = {
   id: number;

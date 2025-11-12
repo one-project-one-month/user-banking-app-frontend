@@ -9,10 +9,7 @@ import { useCreateNickname, useUpdateNickname } from "@/queries/users.query";
 import Spinner from "@/components/common/Spinner";
 
 const NickNamesSchema = z.object({
-  accountNumber: z
-    .string()
-    .min(1, "Account number is required")
-    .regex(/^\d+$/, "Account number must contain only numbers"),
+  accountNumber: z.string(),
   nickName: z
     .string()
     .min(2, "Nickname must be at least 2 characters long")
