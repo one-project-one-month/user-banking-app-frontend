@@ -65,7 +65,7 @@ const TransferPage = () => {
   }, [dispatch]);
 
   const handleSelect = (value: string) => {
-  const selected = nicknameList.find((n) => n.nickname === value);
+  const selected = nicknameList?.find((n) => n.nickname === value);
   if (selected) dispatch(setSelectedNickname(selected.id));
 };
    const isLoadingAccountInfo = isFetchingNickname || isFetchingAccount;
@@ -102,7 +102,7 @@ const TransferPage = () => {
       dispatch(setFullname(""));
       dispatch(setToAccountId(null));
     }
-  } catch (error) {
+  } catch (error ) {
     errorToast("Error", error.message);
   }
 };
@@ -156,7 +156,7 @@ const TransferPage = () => {
           </label>
           <Select value={selectedNicknameValue} onValueChange={handleSelect}>
           <SelectTrigger className="w-full">
-            <SelectValue placeholder="Select Nickname" />
+            <SelectValue placeholder={isLoadingAccountInfo ? "Loading..." : "Select a nickname"} />
           </SelectTrigger>
           <SelectContent>
             {isFetchingNickname ? (
@@ -191,7 +191,7 @@ const TransferPage = () => {
             value={toAccount}
             disabled={isLoadingAccountInfo}
             onChange={(e) => dispatch(setToAccount(e.target.value))}
-            placeholder="Account number"
+            placeholder={isLoadingAccountInfo ? "Loading..." : "Account Number"}
           />
         </div>
 

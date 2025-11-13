@@ -86,7 +86,7 @@ const Confirmation = () => {
         </div>
         <div className="">
           <h1>Note</h1>
-          <Textarea placeholder="enter your note" type="text" value={note} onChange={(e)=> dispatch(setNote(e.target.value))}/>
+          <Textarea placeholder="enter your note" value={note} onChange={(e)=> dispatch(setNote(e.target.value))}/>
         </div>
       </div>
       <div className="w-full">

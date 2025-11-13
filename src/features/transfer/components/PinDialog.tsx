@@ -30,7 +30,6 @@ export function PinDialog() {
       if ( pin.length < 6) {
       dispatch(setPin(pin + digit))
     }
-    
   }
 
   const handleBackspace = () => {
@@ -48,14 +47,14 @@ const submitTransfer = useCallback(() => {
     note,
     pin,
   });
-  console.log(toAccountId,amount,note,pin)
 }, [toAccountId, pin, amount, note, mutate]); 
 
 useEffect(() => {
   if (pin.length === 6) {
     submitTransfer(); 
+    dispatch(setPin(''))
   }
-}, [pin, submitTransfer]);
+}, [pin, submitTransfer,dispatch]);
 
   const keypad = [
     "1", "2", "3",

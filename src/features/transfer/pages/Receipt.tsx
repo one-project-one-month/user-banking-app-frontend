@@ -2,12 +2,15 @@ import type { RootState } from '@/app/store/store'
 import { Button } from '@/components/ui/button'
 import useGetUserData from '@/hooks/useGetUserData'
 import useNickNameData from '@/hooks/useNicknameData'
-import { ArrowLeft, MoveDown, Plus } from 'lucide-react'
-import { useSelector } from 'react-redux'
-import { Link, useNavigate } from 'react-router-dom'
+import { ArrowLeft, MoveDown } from 'lucide-react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import NicknameDialog from '../components/NicknameDialog'
+import { setAmount, setFullname, setNote, setPin, setSelectedNickname, setToAccount, setToAccountId } from '../redux/accountTransferSlice'
 
 const Receipt = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch()
   
     const { info, accountDetail } = useGetUserData();
       const { nicknameList } = useNickNameData();
@@ -20,6 +23,17 @@ const Receipt = () => {
     const selectedNicknameValue = nicknameList?.find(
   (n) => n.id === selectedNickname
 )?.nickname;
+
+const handleSave = ()=>{
+  dispatch(setPin(''))
+  dispatch(setFullname(''))
+  dispatch(setSelectedNickname(''))
+  dispatch(setToAccount(''))
+  dispatch(setToAccountId(''))
+  dispatch(setAmount(''))
+  dispatch(setNote(''))
+  navigate('/')
+}
   
   return (
      <div className=" mx-8 mt-10 space-y-6">
@@ -75,22 +89,20 @@ const Receipt = () => {
       <div className="">
         <div className="flex items-center justify-between">
           <p className='text-lg text-gray-600'>Amount (Ks) :</p>
-          <p className='text-xl text-gray-700'>{amount}102340 <span className='text-base text-gray-500'>Ks</span></p>
+          <p className='text-xl text-gray-700 '>{amount}<span className='text-base text-gray-500 ml-2'>Ks</span></p>
         </div>
         <div className="flex items-center justify-between">
           <p className='text-lg text-gray-500'>Note :</p>
-          <p className='text-lg text-gray-700'>Testing {note} </p>
+          <p className='text-lg text-gray-700'>{note} </p>
         </div>
       </div>
-      <div className="flex flex-col items-center gap-4 mb-30">
-        <div className=""><Plus size={60} className='border-2 border-gray-300 text-yellow-600 rounded-full p-3'/></div>
-        <p>Set Up Nickname</p>
-      </div>
-      <Link to="/">
-          <Button type="button"  className="w-full text-white py-2">
+      {
+        selectedNicknameValue ? <div></div> : <NicknameDialog/>
+      }
+      
+          <Button type="button" onClick={handleSave} className="w-full text-white py-2">
             Save Receipt
           </Button>
-        </Link>
     </div>
   )
 }

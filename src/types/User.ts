@@ -1,21 +1,10 @@
-import type { BaseResponse, Tempelate } from "./Common";
+import type { BaseResponse, Template } from "./Common";
 
 export type ChangePasswordPayload = {
   oldPassword: string;
   newPassword: string;
 };
 
-export type UserInfo = {
-  fullname: string;
-  username: string;
-  email: string;
-  dateOfBirth: string;
-  gender: Tempelate;
-  nationality: Tempelate;
-  phoneNumber: string;
-  relationship: Tempelate;
-  address: string;
-};
 
 export type AccountDetail = {
   id: number;
@@ -23,14 +12,22 @@ export type AccountDetail = {
   balance: number;
 };
 
-export type UserDetail = {
-  username: string;
+export type UserInfo = {
   email: string;
+  username: string;
+  fullname: string;
+  dateOfBirth: string;  
+  gender: Template; 
+  nationality: Template;  
+  isPolicyAgreement: boolean;
+  isAutoSaveReceipt: boolean;
   currentBalance: number;
-  selectedAccountDetails: AccountDetail;
+  selectedAccountDetails: AccountDetail;  
 };
 
-export type UserDetailResponse = BaseResponse<UserDetail>;
+
+export type UserDetailResponse = BaseResponse<UserInfo>;
+
 
 export type Nickname = {
   id: number;
@@ -41,7 +38,18 @@ export type Nickname = {
   };
 };
 
-export type NicknameListResponse = BaseResponse<Nickname[]>;
+export type NicknameOption = {
+  id: number;
+  nickname: string;
+  toAccountDetail: {
+    id: number;
+    accountNumber: string;
+  };
+};
+
+export type NicknameListResponse = BaseResponse<{
+  nicknameOptions: NicknameOption[];
+}>;
 
 export type NicknameEditPayload = {
   id: number;
