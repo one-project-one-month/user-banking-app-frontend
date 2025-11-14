@@ -104,6 +104,4 @@ jobs:
       - name: Push Docker image to ECR
         run: docker push ${{ steps.build-image.outputs.image_uri }}
 
-      - name: Deploy to S3
-        run: |
-          aws s3 sync dist s3://user-banking-app11/ --delete
+
