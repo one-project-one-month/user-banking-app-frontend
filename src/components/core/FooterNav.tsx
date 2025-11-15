@@ -13,6 +13,7 @@ const NO_NAV_PAGES = [
   "/settings/profile/edit",
   "/settings/nicknames",
   "/settings/change-password",
+  "/settings/change-pin",
 ];
 
 function FooterNav() {
@@ -51,14 +52,14 @@ function FooterNav() {
                 </div>
               </div>
               <Link
-                to="/"
+                to="/transfer"
                 className="flex flex-col gap-y-2 text-primary-custom justify-center items-center"
               >
                 <HandHelping className="w-5 h-5" />
                 <span className="text-center text-xs">Transfer</span>
               </Link>
               <Link
-                to="/"
+                to="/settings"
                 className="flex flex-col gap-y-2 text-primary-custom justify-center items-center"
               >
                 <Settings className="w-5 h-5" />

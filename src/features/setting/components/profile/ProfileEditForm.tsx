@@ -8,14 +8,16 @@ import FormSelectInput from "@/components/common/form-inputs/FormSelectInput";
 import { Button } from "@/components/ui/button";
 import FormTextAreaInput from "@/components/common/form-inputs/FormTextAreaInput";
 import type { UserInfo } from "@/types/User";
+import { useGetTemplates } from "@/queries/auth.query";
+import { useUpdateUser } from "@/queries/users.query";
 
 const ProfileEditSchema = z.object({
   fullname: z.string(),
   email: z.email(),
   dateOfBirth: z.string(),
-  genderId: z.number(),
-  nationalityId: z.number(),
-  relationshipId: z.number(),
+  genderId: z.string(),
+  nationalityId: z.string(),
+  phoneNumber: z.string(),
   address: z.string().min(5, "Address is required"),
 });
 
@@ -32,15 +34,27 @@ function ProfileEditForm({ userInfo }: ProfileEditFormProps) {
       fullname: userInfo?.fullname ?? "",
       email: userInfo?.email ?? "",
       dateOfBirth: userInfo?.dateOfBirth ?? "",
-      genderId: userInfo?.gender?.id ?? 1,
-      nationalityId: userInfo?.nationality?.id ?? 1,
-      relationshipId: userInfo?.relationship?.id ?? 1,
+      genderId: String(userInfo?.gender?.id) ?? "",
+      nationalityId: String(userInfo?.nationality?.id) ?? "",
+      phoneNumber: userInfo?.phoneNumber ?? "",
       address: userInfo?.address,
     },
   });
 
+  const { data: templates, isLoading: isTemplateLoading } = useGetTemplates();
+  const { mutate: update, isPending } = useUpdateUser();
+
   const onSubmit = (values: ProfileEditFormValue) => {
-    console.log("Profile updated:", values);
+    const payload = {
+      fullname: values.fullname,
+      dateOfBirth: values.dateOfBirth,
+      genderId: Number(values.genderId),
+      nationalityId: Number(values.nationalityId),
+      phoneNumber: values.phoneNumber,
+      address: values.address,
+    };
+
+    update(payload);
   };
 
   return (
@@ -87,10 +101,11 @@ function ProfileEditForm({ userInfo }: ProfileEditFormProps) {
               placeholder="Choose your gender"
               form={form}
               defaultValue="1"
-              options={[
-                { label: "Male", value: 1 },
-                { label: "Female", value: 2 },
-              ]}
+              options={
+                templates?.genderOptions?.map((t) => {
+                  return { label: t.name, value: t.id };
+                }) ?? []
+              }
               wrapperClass="mb-4"
               className="py-7"
             />
@@ -100,24 +115,19 @@ function ProfileEditForm({ userInfo }: ProfileEditFormProps) {
               placeholder="Select nationality"
               form={form}
               defaultValue="1"
-              options={[
-                { label: "Myanmar", value: 1 },
-                { label: "Thailand", value: 2 },
-              ]}
+              options={
+                templates?.nationalityOptions?.map((t) => {
+                  return { label: t.name, value: t.id };
+                }) ?? []
+              }
               wrapperClass="mb-4"
               className="py-7"
             />
-            <FormSelectInput
-              name="relationshipId"
-              label="Relationship"
-              placeholder="Select relationship status"
+            <FormTextInput
+              name="phoneNumber"
+              label="PhoneNumber"
+              placeholder="Enter Phone number"
               form={form}
-              defaultValue="1"
-              options={[
-                { label: "Single", value: 1 },
-                { label: "Married", value: 2 },
-                { label: "Divorced", value: 3 },
-              ]}
               wrapperClass="mb-4"
               className="py-7"
             />
@@ -131,7 +141,11 @@ function ProfileEditForm({ userInfo }: ProfileEditFormProps) {
             />
           </div>
 
-          <Button type="submit" className="w-full py-6 mt-4">
+          <Button
+            type="submit"
+            disabled={isPending}
+            className="w-full py-6 mt-4"
+          >
             Save Changes
           </Button>
         </form>

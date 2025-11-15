@@ -2,21 +2,21 @@ import type { UserInfo } from "@/types/User";
 import { useMemo } from "react";
 
 type ProfileInfoSectionProps = {
-  user: UserInfo;
+  user: UserInfo | null;
 };
 
 function ProfileInfoSection({ user }: ProfileInfoSectionProps) {
   const profileInfo = useMemo(
     () => [
-      { label: "Full Name", value: user.fullname },
-      { label: "Username", value: user.username },
-      { label: "Email", value: user.email },
-      { label: "Date of Birth", value: user.dateOfBirth },
-      { label: "Gender", value: user.gender?.name },
-      { label: "Nationality", value: user.nationality?.name },
+      { label: "Full Name", value: user?.fullname },
+      { label: "Username", value: user?.username },
+      { label: "Email", value: user?.email },
+      { label: "Date of Birth", value: user?.dateOfBirth },
+      { label: "Gender", value: user?.gender?.name },
+      { label: "Nationality", value: user?.nationality?.name },
       { label: "Phone Number", value: user?.phoneNumber },
-      { label: "Relationship", value: user.relationship?.name },
-      { label: "Address", value: user.address },
+      // { label: "Relationship", value: user?.relationship?.name },
+      { label: "Address", value: user?.address },
     ],
     [user]
   );

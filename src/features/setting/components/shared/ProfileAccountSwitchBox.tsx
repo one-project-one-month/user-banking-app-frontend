@@ -19,10 +19,11 @@ import { Check, Wallet } from "lucide-react";
 import { useState } from "react";
 
 type Props = {
+  accountNumber?: string;
   className?: string;
 };
 
-function ProfileAccountSwitchBox({ className }: Props) {
+function ProfileAccountSwitchBox({ className, accountNumber }: Props) {
   const [open, setOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<number | null>(null);
 
@@ -71,8 +72,9 @@ function ProfileAccountSwitchBox({ className }: Props) {
               {options.map((opt) => (
                 <CommandItem
                   key={opt.id}
-                  value={String(opt.accountNumber)}
+                  value={String(opt.id)}
                   onSelect={handleSelect}
+                  disabled={opt.accountNumber === accountNumber}
                 >
                   <div className="flex flex-col">
                     <span className="font-medium">{opt.accountNumber}</span>
@@ -84,7 +86,9 @@ function ProfileAccountSwitchBox({ className }: Props) {
                   <Check
                     className={cn(
                       "ml-auto",
-                      selectedId === opt.id ? "opacity-100" : "opacity-0"
+                      accountNumber === opt.accountNumber
+                        ? "opacity-100"
+                        : "opacity-0"
                     )}
                   />
                 </CommandItem>

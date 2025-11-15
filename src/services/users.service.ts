@@ -4,6 +4,7 @@ import type {
   ChangePasswordPayload,
   NicknameCreatePayload,
   NicknameEditPayload,
+  UserUpdatePayload,
 } from "@/types/User";
 
 export const changePassword = async (payload: ChangePasswordPayload) => {
@@ -11,6 +12,17 @@ export const changePassword = async (payload: ChangePasswordPayload) => {
     const response = await API.post(
       "personal-banking/users/change-password",
       payload
+    );
+    return response.data;
+  } catch (error) {
+    throwError(error);
+  }
+};
+
+export const autoSaveReceipt = async (flag: boolean) => {
+  try {
+    const response = await API.put(
+      `/personal-banking/users/autoSaveRecepit?flag=${flag}`
     );
     return response.data;
   } catch (error) {
@@ -28,6 +40,15 @@ export const getCurrentUser = async () => {
   }
 };
 
+export const updateCurrentUser = async (data: UserUpdatePayload) => {
+  try {
+    const response = await API.put("personal-banking/users/me", data);
+    return response.data;
+  } catch (error) {
+    throwError(error);
+  }
+};
+
 export const getNicknameList = async () => {
   try {
     const response = await API.get("personal-banking/users/nickname");
@@ -39,7 +60,7 @@ export const getNicknameList = async () => {
 
 export const createNickname = async (data: NicknameCreatePayload) => {
   try {
-    const response = await API.post(`/users/nickname`, data);
+    const response = await API.post(`personal-banking/users/nickname`, data);
     return response.data;
   } catch (error) {
     throwError(error);
@@ -48,10 +69,13 @@ export const createNickname = async (data: NicknameCreatePayload) => {
 
 export const updateNickname = async (data: NicknameEditPayload) => {
   try {
-    const response = await API.put(`/users/nickname/${data.id}`, {
-      toAccountId: data.toAccountId,
-      nickname: data.nickName,
-    });
+    const response = await API.put(
+      `personal-banking/users/nickname/${data.id}`,
+      {
+        toAccountId: data.toAccountId,
+        nickname: data.nickName,
+      }
+    );
     return response.data;
   } catch (error) {
     throwError(error);
@@ -60,7 +84,7 @@ export const updateNickname = async (data: NicknameEditPayload) => {
 
 export const deleteNickname = async (id: number) => {
   try {
-    const response = await API.delete(`/users/nickname/${id}`);
+    const response = await API.delete(`personal-banking/users/nickname/${id}`);
     return response.data;
   } catch (error) {
     throwError(error);
@@ -94,6 +118,24 @@ export const mediaUpload = async (data: FormData) => {
         "Content-Type": "multipart/form-data",
       },
     });
+    return response.data;
+  } catch (error) {
+    throwError(error);
+  }
+};
+
+export const verifyPin = async (data: { oldPin: string }) => {
+  try {
+    const response = await API.post("personal-banking/users/verify-pin", data);
+    return response.data;
+  } catch (error) {
+    throwError(error);
+  }
+};
+
+export const setPin = async (data: { pin: string }) => {
+  try {
+    const response = await API.post("personal-banking/users/set-pin", data);
     return response.data;
   } catch (error) {
     throwError(error);

@@ -4,7 +4,6 @@ import NickNamesBarSkeleton from "./NickNamesBarSkeleton";
 import { useCallback } from "react";
 import {
   Empty,
-  EmptyContent,
   EmptyDescription,
   EmptyHeader,
   EmptyMedia,

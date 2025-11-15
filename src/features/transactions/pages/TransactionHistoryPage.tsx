@@ -27,7 +27,9 @@ const TransactionHistoryPage = () => {
           onChange={setCurrentFilter}
           currentFilter={currentFilter}
         />
-        <TransactionList transactions={transactions ?? []} />
+        <TransactionList
+          transactions={transactions?.recentTransferListOptions ?? []}
+        />
       </main>
     </>
   );

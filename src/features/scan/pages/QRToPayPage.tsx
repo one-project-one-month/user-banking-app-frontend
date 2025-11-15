@@ -8,7 +8,7 @@ import Spinner from "@/components/common/Spinner";
 import { Skeleton } from "@/components/ui/skeleton";
 
 function QRToPayPage() {
-  const { timeleft, isPending, qrToken } = useRefreshGenerate(5);
+  const { timeleft, isPending, qrToken } = useRefreshGenerate(60);
 
   const isLoading = !qrToken || isPending;
 
@@ -18,24 +18,24 @@ function QRToPayPage() {
         <MobileHeader className="self-start" backTo="/" title="QR to Pay" />
 
         <div className="flex flex-col gap-5 justify-center items-center flex-1">
-          {isLoading ? (
+          {/* {isLoading ? (
             <Skeleton className="bg-black-pearl-200 w-[80%] h-12 rounded-md" />
           ) : (
             <Barcode className="w-[80%]" value={qrToken} displayValue={false} />
-          )}
+          )} */}
 
           {isLoading ? (
             <Skeleton className="bg-black-pearl-200 w-[200px] h-[200px] rounded-xl" />
           ) : (
             <QRWithLogo
-              size={160}
+              size={260}
               logoSize={60}
               value={qrToken}
               logoUrl={logo}
             />
           )}
 
-          {isPending ? (
+          {isLoading ? (
             <span className="flex gap-3 text-xs justify-center items-center">
               please wait <Spinner />
             </span>

@@ -9,7 +9,7 @@ const BASE_URL = AppConfig.BASE_URL;
 const API: AxiosInstance = axios.create({
   baseURL: BASE_URL,
   withCredentials: true,
-  timeout: 10000,
+  // timeout: 10000,
   headers: {
     "Content-Type": "application/json",
   },
@@ -31,7 +31,7 @@ API.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    if (error.response?.code === 403 && !originalRequest._retry) {
       originalRequest._retry = true;
 
       const refreshToken = Cookies.get("refreshToken");
@@ -51,8 +51,8 @@ API.interceptors.response.use(
         if (newAccessToken) {
           store.dispatch(refreshAccessToken(newAccessToken));
 
-          API.defaults.headers.Authorization = `JWT ${newAccessToken}`;
-          originalRequest.headers.Authorization = `JWT ${newAccessToken}`;
+          API.defaults.headers.Authorization = `Bearer ${newAccessToken}`;
+          originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
 
           return API(originalRequest);
         } else {

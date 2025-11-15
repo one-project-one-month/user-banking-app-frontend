@@ -8,9 +8,14 @@ import exampleBanner from "@/assets/images/example-banner.png";
 import HistorySection from "../components/history/HistorySection";
 import HistoryHeader from "../components/history/HistoryHeader";
 import FavouriteList from "../components/favourite/FavouriteList";
+import useGetUserData from "@/hooks/useGetUserData";
+import PageLoading from "@/components/core/PageLoading";
 
 function HomePage() {
   const isMobile = useIsMobile();
+  const { info, isUserDataLoading } = useGetUserData();
+
+  if (isUserDataLoading) return <PageLoading />;
 
   return (
     <div
@@ -32,7 +37,7 @@ function HomePage() {
 
         <div className="text-white">
           <p className="text-sm text-slate-200">Good Morning</p>
-          <p>WAI YAN LINN</p>
+          <p>{info?.fullname}</p>
         </div>
       </div>
 
@@ -42,7 +47,11 @@ function HomePage() {
           <div className="w-full grid grid-cols-3 gap-6">
             {/* LEFT PANEL */}
             <div className="flex flex-col gap-5">
-              <AmountDisplaySection />
+              <AmountDisplaySection
+                amount={info?.currentBalance}
+                accountNumber={info?.selectedAccountDetails.accountNumber}
+                isMobile={isMobile}
+              />
               <ShortCutSection />
               <div>
                 <HistoryHeader />
@@ -76,7 +85,11 @@ function HomePage() {
       {isMobile && (
         <>
           <div className="p-5">
-            <AmountDisplaySection isMobile={isMobile} />
+            <AmountDisplaySection
+              amount={info?.currentBalance}
+              accountNumber={info?.selectedAccountDetails.accountNumber}
+              isMobile={isMobile}
+            />
           </div>
           <div className="bg-white rounded-t-3xl mt-6">
             <div className="p-5">

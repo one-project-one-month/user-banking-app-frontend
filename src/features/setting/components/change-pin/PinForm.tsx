@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import FormPinInput from "@/components/common/form-inputs/FormPinInput";
+import Spinner from "@/components/common/Spinner";
 
 const pinSchema = z.object({
   pin: z
@@ -18,9 +19,11 @@ type PinFormValues = z.infer<typeof pinSchema>;
 type PinFormProps = {
   onSubmit: (data: PinFormValues) => void;
   isLoading?: boolean;
+  actionLabel?: string;
+  title?: string;
 };
 
-function PinForm({ onSubmit, isLoading }: PinFormProps) {
+function PinForm({ onSubmit, isLoading, actionLabel, title }: PinFormProps) {
   const form = useForm<PinFormValues>({
     resolver: zodResolver(pinSchema),
     defaultValues: { pin: "" },
@@ -34,19 +37,26 @@ function PinForm({ onSubmit, isLoading }: PinFormProps) {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(handleSubmit)}
-        className="flex flex-col h-full items-center gap-6"
+        className="flex flex-col justify-center p-5  items-center gap-6"
       >
         <FormPinInput
           form={form}
           name="pin"
-          label="Enter Your Current PIN"
+          label={title}
           length={6}
           mask
           wrapperClass="w-full"
         />
 
         <Button type="submit" className="w-full py-6">
-          {isLoading ? "Verifying..." : "Verify PIN"}
+          {isLoading ? (
+            <span className="flex items-center justify-center gap-2">
+              loading...
+              <Spinner className="w-5 h-5" />
+            </span>
+          ) : (
+            actionLabel ?? "Verify PIN"
+          )}
         </Button>
       </form>
     </Form>

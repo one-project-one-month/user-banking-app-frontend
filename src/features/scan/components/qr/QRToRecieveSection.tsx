@@ -7,15 +7,13 @@ import { errorToast } from "@/lib/helper/customToasts";
 import MobileHeader from "@/components/core/MobileHeader";
 import { useGenerateRecieveQR } from "@/queries/scan.query";
 
-//TODO: have to combine logic with react query and also have to implement handle submint inside the form
-
 function QRToRecieveSection() {
   const [isQRGenerated, setIsQRGenerated] = useState<boolean>(false);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(true);
   const [qr, setQr] = useState<string | null>(null);
 
   //query qr generate funtion
-  const { mutateAsync: generateQR } = useGenerateRecieveQR();
+  const { mutateAsync: generateQR, isPending } = useGenerateRecieveQR();
 
   //generate qr function
   const handleDialogOnGenerate = useCallback(
@@ -51,6 +49,7 @@ function QRToRecieveSection() {
         <DialogContent className="md:max-w-lg max-w-[350px]">
           <QRToRecieveAmountSetupForm
             handleDialogOnGenerate={handleDialogOnGenerate}
+            loading={isPending}
           />
         </DialogContent>
       </Dialog>

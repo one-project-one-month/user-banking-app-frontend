@@ -8,6 +8,7 @@ import logoImg from "@/assets/images/app_logo.svg";
 import ChatBox from "./ChatBox";
 import ChatInput from "./ChatInput";
 import ChatNav from "./ChatNav";
+import { useAskQuestion } from "@/queries/faq.query";
 // import { useGenerate } from "../../hooks/donor-chat-bot-queries";
 
 function DateDivider({ label }: { label: string }) {
@@ -31,7 +32,7 @@ function ChatWindow() {
   const [messages, setMessages] = useState<ChatBotMessage[]>([]);
   const scrollContentRef = useRef(null);
 
-  //   const { generate, isPending, isError } = useGenerate(setMessages);
+  const { mutate: ask, isPending, isError } = useAskQuestion();
 
   const sendMessage = (msg: string) => {
     const payLoad = {
@@ -46,7 +47,23 @@ function ChatWindow() {
       return newMsg;
     });
 
-    // generate(msg);
+    ask(
+      { question: msg },
+      {
+        onSuccess: (data) => {
+          const payload = {
+            type: "ai",
+            message: data?.data.answer ?? "",
+            time: new Date(),
+          };
+          setMessages((prev: any) => {
+            const newMsg = [...prev, payload];
+
+            return newMsg;
+          });
+        },
+      }
+    );
   };
 
   useEffect(() => {
@@ -96,7 +113,7 @@ function ChatWindow() {
                     )
                   )}
                 </div>
-                {/* {isPending && (
+                {isPending && (
                   <motion.div
                     className="flex items-center gap-2 text-sm text-gray-700"
                     initial={{ opacity: 0 }}
@@ -120,11 +137,11 @@ function ChatWindow() {
                       Hold on, bro...
                     </motion.span>
                   </motion.div>
-                )} */}
-                {/* {isError && <div className="text-red-500">Error occur</div>} */}
+                )}
+                {isError && <div className="text-red-500">Error occur</div>}
               </div>
             </ScrollArea>
-            <ChatInput sendMessage={sendMessage} />
+            <ChatInput sendMessage={sendMessage} isLoading={isPending} />
           </motion.div>
         )}
       </AnimatePresence>

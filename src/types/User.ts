@@ -5,6 +5,21 @@ export type ChangePasswordPayload = {
   newPassword: string;
 };
 
+export type UserInfo = {
+  fullname: string;
+  username: string;
+  email: string;
+  dateOfBirth: string;
+  gender: Tempelate;
+  nationality: Tempelate;
+  isPolicyAgreement: boolean;
+  isAutoSaveReceipt: boolean;
+  phoneNumber: string;
+  relationship: Tempelate;
+  currentBalance: number;
+  address: string;
+  selectedAccountDetails: AccountDetail;
+};
 
 export type AccountDetail = {
   id: number;
@@ -28,6 +43,14 @@ export type UserInfo = {
 
 export type UserDetailResponse = BaseResponse<UserInfo>;
 
+export type UserUpdatePayload = {
+  fullname: string;
+  dateOfBirth: string;
+  genderId: number;
+  nationalityId: number;
+  phoneNumber: string;
+  address: string;
+};
 
 export type Nickname = {
   id: number;
@@ -38,18 +61,12 @@ export type Nickname = {
   };
 };
 
-export type NicknameOption = {
-  id: number;
-  nickname: string;
-  toAccountDetail: {
-    id: number;
-    accountNumber: string;
-  };
+
+export type NicknameOptions = {
+  nicknameOptions: Nickname[];
 };
 
-export type NicknameListResponse = BaseResponse<{
-  nicknameOptions: NicknameOption[];
-}>;
+export type NicknameListResponse = BaseResponse<NicknameOptions>;
 
 export type NicknameEditPayload = {
   id: number;

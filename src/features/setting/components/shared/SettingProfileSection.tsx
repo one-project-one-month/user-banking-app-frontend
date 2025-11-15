@@ -3,12 +3,14 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import ProfileAccountSwitchBox from "./ProfileAccountSwitchBox";
 import ProfileAvatar from "./ProfileAvatar";
+import { cn } from "@/lib/utils";
 
 type SettingProfileSection = {
   isEdit?: boolean;
   name?: string;
   accountNumber?: string;
   balance?: number;
+  className?: string;
 };
 
 function SettingProfileSection({
@@ -16,6 +18,7 @@ function SettingProfileSection({
   name,
   accountNumber,
   balance,
+  className,
 }: SettingProfileSection) {
   const [isShowAmount, setIsShowAmount] = useState(false);
 
@@ -24,7 +27,12 @@ function SettingProfileSection({
   };
 
   return (
-    <section className="flex justify-start w-full relative md:justify-start gap-5 items-center md:items-start px-1 py-5 md:py-3">
+    <section
+      className={cn(
+        "flex justify-start w-full relative md:justify-start gap-5 items-center md:items-start px-1",
+        className
+      )}
+    >
       <ProfileAvatar />
       <div>
         <h1 className="text-xl font-semibold text-black-pearl-700">{name}</h1>
@@ -41,7 +49,10 @@ function SettingProfileSection({
         </p>
       </div>
       {isEdit ? (
-        <ProfileAccountSwitchBox className="absolute top-2 right-2" />
+        <ProfileAccountSwitchBox
+          accountNumber={accountNumber}
+          className="absolute top-2 right-2"
+        />
       ) : (
         <Link
           to="profile"

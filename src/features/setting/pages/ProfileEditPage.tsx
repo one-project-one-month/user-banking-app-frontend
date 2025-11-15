@@ -34,6 +34,7 @@ function ProfileEditPage() {
         name={info?.username}
         accountNumber={accountDetail?.accountNumber}
         balance={info?.currentBalance}
+        className="mb-5"
       />
       <ProfileEditForm userInfo={info} />
     </main>

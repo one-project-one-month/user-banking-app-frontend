@@ -5,7 +5,7 @@ function useGetUserData() {
 
   const info = user?.data;
   const accountDetail = user?.data.selectedAccountDetails;
- 
+
   return {
     info,
     accountDetail,
