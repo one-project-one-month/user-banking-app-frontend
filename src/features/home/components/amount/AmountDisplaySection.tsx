@@ -3,9 +3,15 @@ import { useState } from "react";
 
 type AmountDisplaySectionProps = {
   isMobile?: boolean;
+  amount?: number;
+  accountNumber?: string;
 };
 
-function AmountDisplaySection({ isMobile }: AmountDisplaySectionProps) {
+function AmountDisplaySection({
+  isMobile,
+  amount,
+  accountNumber,
+}: AmountDisplaySectionProps) {
   const [isShowAmount, setIsShowAmount] = useState(false);
 
   const toggleShowAmount = () => setIsShowAmount((prev) => !prev);
@@ -46,18 +52,16 @@ function AmountDisplaySection({ isMobile }: AmountDisplaySectionProps) {
 
         <p className="flex space-x-2 w-full h-12 justify-center md:justify-start items-center">
           <span className="cursor-default text-xl md:text-4xl select-none font-semibold">
-            {isShowAmount ? "1,000,000 MMK" : "***********"}
+            {isShowAmount ? `${amount} MMK` : "***********"}
           </span>
           <span onClick={toggleShowAmount} className="cursor-pointer">
             {isShowAmount ? <Eye /> : <EyeClosed />}
           </span>
         </p>
-
-        {/* Account Number (web only) */}
       </div>
       <p className="hidden md:flex absolute left-5 bottom-5 z-20 text-sm tracking-widest text-white/70">
         Account No:{" "}
-        <span className="ml-2 text-white font-medium">1234 5678 9012</span>
+        <span className="ml-2 text-white font-medium">{accountNumber}</span>
       </p>
     </section>
   );
