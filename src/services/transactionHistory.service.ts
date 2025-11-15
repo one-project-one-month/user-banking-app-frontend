@@ -1,4 +1,5 @@
 import API from "@/app/api/axios";
+import { throwError } from "@/lib/helper/common";
 import type { Transaction, TransactionParams } from "@/types/transaction.type";
 
 export const DUMMY_TRANSACTIONS: Transaction[] = [
@@ -64,25 +65,36 @@ export const DUMMY_TRANSACTIONS: Transaction[] = [
   },
 ];
 
-export const getTransactions = async (params?: TransactionParams): Promise<Transaction[]> => {
+export const getTransactions = async (params?: TransactionParams) => {
   try {
-    const res = await API.get("/transactions/", {params});
+    const res = await API.get("personal-banking/users/transaction-history", {
+      params,
+    });
     return res.data;
   } catch (error) {
-    console.error("API request failed, using dummy data:", error);
-    // if (axios.isAxiosError(error)) {
-    //   throw new Error(error.response?.data?.message || error.message);
-    // }
-    return DUMMY_TRANSACTIONS;
+    throwError(error);
   }
 };
 
-export const getTransactionDetail = async (id:string): Promise<Transaction> =>{
-  try{
+export const getTransactionDetail = async (
+  id: string
+): Promise<Transaction> => {
+  try {
     const res = await API.get(`/transactions/${id}`);
     return res.data;
-  }catch(error){
+  } catch (error) {
     console.error("API request failed, using dummy data:", error);
     return DUMMY_TRANSACTIONS[0];
   }
-}
+};
+
+export const getRecentTransactions = async () => {
+  try {
+    const response = await API.get(
+      `personal-banking/users/recent-transfer-list`
+    );
+    return response.data;
+  } catch (error) {
+    throwError(error);
+  }
+};

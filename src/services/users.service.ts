@@ -68,10 +68,13 @@ export const createNickname = async (data: NicknameCreatePayload) => {
 
 export const updateNickname = async (data: NicknameEditPayload) => {
   try {
-    const response = await API.put(`/users/nickname/${data.id}`, {
-      toAccountId: data.toAccountId,
-      nickname: data.nickName,
-    });
+    const response = await API.put(
+      `personal-banking/users/nickname/${data.id}`,
+      {
+        toAccountId: data.toAccountId,
+        nickname: data.nickName,
+      }
+    );
     return response.data;
   } catch (error) {
     throwError(error);
@@ -80,7 +83,7 @@ export const updateNickname = async (data: NicknameEditPayload) => {
 
 export const deleteNickname = async (id: number) => {
   try {
-    const response = await API.delete(`/users/nickname/${id}`);
+    const response = await API.delete(`personal-banking/users/nickname/${id}`);
     return response.data;
   } catch (error) {
     throwError(error);
