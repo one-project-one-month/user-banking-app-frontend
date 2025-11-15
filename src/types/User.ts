@@ -1,4 +1,4 @@
-import type { BaseResponse, Tempelate } from "./Common";
+import type { BaseResponse, Template } from "./Common";
 
 export type ChangePasswordPayload = {
   oldPassword: string;
@@ -24,15 +24,22 @@ export type UserInfo = {
 export type AccountDetail = {
   id: number;
   accountNumber: string;
-  currentBalance: number;
+  balance: number;
 };
 
-export type UserDetail = {
-  username: string;
+export type UserInfo = {
   email: string;
+  username: string;
+  fullname: string;
+  dateOfBirth: string;  
+  gender: Template; 
+  nationality: Template;  
+  isPolicyAgreement: boolean;
+  isAutoSaveReceipt: boolean;
   currentBalance: number;
-  selectedAccountDetail: AccountDetail;
+  selectedAccountDetails: AccountDetail;  
 };
+
 
 export type UserDetailResponse = BaseResponse<UserInfo>;
 
@@ -53,6 +60,7 @@ export type Nickname = {
     accountNumber: string;
   };
 };
+
 
 export type NicknameOptions = {
   nicknameOptions: Nickname[];

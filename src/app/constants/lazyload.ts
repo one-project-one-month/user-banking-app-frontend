@@ -20,12 +20,14 @@ export const TransferLayout = PageLoader(
 export const TransferPage = PageLoader(
   lazy(() => import("@/features/transfer/pages/TransferPage"))
 );
-export const TransferAccount = PageLoader(
-  lazy(() => import("@/features/transfer/pages/TransferAccount"))
-);
+
 export const Confirmation = PageLoader(
   lazy(() => import("@/features/transfer/pages/Confirmation"))
 );
+
+export const Receipt = PageLoader(
+  lazy(()=>import("@/features/transfer/pages/Receipt"))
+)
 //*pages
 export const Home = PageLoader(
   lazy(() => import("@/features/home/pages/HomePage"))

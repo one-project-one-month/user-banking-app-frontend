@@ -1,6 +1,6 @@
 import {
   Confirmation,
-  TransferAccount,
+  Receipt,
   TransferLayout,
   TransferPage,
 } from "../constants/lazyload";
@@ -11,8 +11,8 @@ const transferRouter = [
     element: <TransferLayout />,
     children: [
       { index: true, element: <TransferPage /> },
-      { path: "recipient", element: <TransferAccount /> },
       { path: "confirmation", element: <Confirmation /> },
+      { path : "receipt",element : <Receipt/>}
     ],
   },
 ];

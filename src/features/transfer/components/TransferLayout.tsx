@@ -2,7 +2,7 @@ import { Outlet } from 'react-router-dom'
 
 const TransferLayout = () => {
   return (
-    <div>
+    <div className=''>
       <Outlet/>
     </div>
   )
