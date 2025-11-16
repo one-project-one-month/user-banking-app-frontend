@@ -9,7 +9,9 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import useImageQRScanner from "../../hooks/useImageQRScanner";
 import useCrop from "../../hooks/useCrop";
-import { useNavigate } from "react-router-dom";
+import { useScanQRToRecieve } from "@/queries/scan.query";
+import { usePrepare } from "@/queries/transfer.query";
+import Spinner from "@/components/common/Spinner";
 
 function ScanWithUploadQR() {
   //*crop state
@@ -32,7 +34,6 @@ function ScanWithUploadQR() {
     onCropImageLoad,
   } = useCrop();
 
-  const navigate = useNavigate();
   const { getInputProps, getRootProps, isDragActive } = useDropzone({
     accept: {
       "image/jpeg": [],
@@ -53,16 +54,41 @@ function ScanWithUploadQR() {
     },
   });
 
-  const handleScan = () => {
+  //scan api
+  const { mutateAsync: scan, isPending: isScanPending } = useScanQRToRecieve();
+  const { mutate: prepare, isPending: isPreparePending } = usePrepare();
+
+  const handleScan = async () => {
     const qrCode = useImageQRScanner({ completedCrop, imgRef });
 
+    setIsOpenCrop(false);
+
     if (qrCode) {
-      navigate(`/transfer?token=${qrCode.data}`);
+      const res = await scan({ token: qrCode.data });
+      const data = res?.data;
+      prepare({
+        toAccountNumber: data?.toAccountDetails.accountNumber ?? "",
+        amount: data?.amount,
+      });
     }
   };
 
   return (
-    <div className="flex flex-col w-full justify-center gap-y-3 items-center h-full bg-white px-5">
+    <div className="flex flex-col w-full relative justify-center gap-y-3 items-center h-full bg-white px-5">
+      {(isPreparePending || isScanPending) && (
+        <div className="w-full h-full absolute left-0 top-0 z-50 flex justify-center items-center bg-black/50">
+          <div className="flex justify-center items-center gap-3">
+            <span className="text-white text-2xl">
+              {isScanPending
+                ? "scanning..."
+                : isPreparePending
+                ? "preparing..."
+                : "loading..."}
+            </span>
+            <Spinner className="text-white" size="w-6 h-6" />
+          </div>
+        </div>
+      )}
       <div>
         <h1 className="text-3xl mb-2 text-center font-semibold text-black-pearl-700">
           Upload Your QR Code

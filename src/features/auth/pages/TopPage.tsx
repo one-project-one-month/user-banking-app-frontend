@@ -19,14 +19,14 @@ const TopPage: React.FC = () => {
       <div className="w-full max-w-xs flex flex-col gap-4">
         <Button
           onClick={() => navigate("/auth/register")}
-          className="w-full hover:bg-gray-300 text-white  py-3 rounded-md"
+          className="w-full hover:bg-primary/80  text-white  py-6 rounded-lg"
         >
           Create Account
         </Button>
 
         <Button
           onClick={() => navigate("/auth/login")}
-          className="w-full hover:bg-gray-300 text-white py-3 rounded-md"
+          className="w-full hover:bg-primary/80  text-white py-6 rounded-lg"
         >
           Login
         </Button>

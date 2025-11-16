@@ -26,7 +26,7 @@ function NickNamesForm({ formData }: NickNamesFormProps) {
   const form = useForm<NickNamesFormValue>({
     resolver: zodResolver(NickNamesSchema),
     defaultValues: {
-      accountNumber: formData?.toAccountDetail?.accountNumber ?? "",
+      accountNumber: formData ? String(formData?.toAccountDetail?.id) : "",
       nickName: formData?.nickname ?? "",
     },
   });
@@ -73,6 +73,8 @@ function NickNamesForm({ formData }: NickNamesFormProps) {
             placeholder="Enter account number"
             form={form}
             wrapperClass="mb-6"
+            type={formData ? "hidden" : "text"}
+            labelClass={`${formData && "hidden"}`}
           />
           <FormFloatinglabelInput
             name="nickName"

@@ -4,14 +4,14 @@ import {
   getTransactions,
 } from "@/services/transactionHistory.service";
 import type {
-  TransactionHistory,
   RecentTransactionResponse,
   TransactionParams,
+  TransactionHistoryResponse,
 } from "@/types/transaction.type";
 import { useQuery } from "@tanstack/react-query";
 
 export const useGetTransactions = (params?: TransactionParams) => {
-  return useQuery<TransactionHistory>({
+  return useQuery<TransactionHistoryResponse>({
     queryKey: ["transaction", params],
     queryFn: () => getTransactions(params),
   });

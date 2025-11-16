@@ -18,7 +18,7 @@ function ScanToRecievePage() {
           detection.
         </p>
       </div>
-      <ScanWithCamera />
+      <ScanWithCamera isScanToRecieve />
     </div>
   );
 }

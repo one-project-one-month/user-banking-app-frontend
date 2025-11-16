@@ -113,15 +113,6 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter>
-        <SidebarMenu className="gap-3 px-1 ">
-          <SidebarMenuItem>
-            <SidebarMenuButton className="cursor-pointer text-sm">
-              Logout
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarFooter>
     </Sidebar>
   );
 }

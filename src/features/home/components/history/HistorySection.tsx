@@ -9,16 +9,11 @@ import {
   EmptyTitle,
 } from "@/components/ui/empty";
 import { FileJson2 } from "lucide-react";
+import useGetUserData from "@/hooks/useGetUserData";
 
 function HistorySection() {
-  const transactionList = Array(5).fill({
-    type: "income",
-    senderName: "Bo Bo",
-    walletNumber: "223469",
-    amount: 50000,
-  });
-
   const { data: history, isLoading } = useGetRecentTransactionHistory();
+  const { info } = useGetUserData();
 
   if (isLoading)
     return (
@@ -30,7 +25,7 @@ function HistorySection() {
     );
 
   return (
-    <section className="min-h-120 bg-white rounded-2xl shadow-sm flex justify-center items-center ">
+    <section className="min-h-120">
       <div className="flex flex-col gap-2">
         {history?.data &&
         history?.data.recentTransferListOptions?.length > 0 ? (
@@ -41,6 +36,12 @@ function HistorySection() {
                 senderName={tx.user.name}
                 amount={tx.account.balance}
                 walletNumber={tx.account.accountNumber}
+                type={
+                  info?.selectedAccountDetails.accountNumber ===
+                  tx.account.accountNumber
+                    ? "income"
+                    : "expense"
+                }
               />
             );
           })
