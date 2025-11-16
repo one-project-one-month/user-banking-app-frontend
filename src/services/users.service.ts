@@ -34,7 +34,6 @@ export const getCurrentUser = async () => {
   try {
     const response = await API.get("personal-banking/users/me");
     return response.data;
-    
   } catch (error) {
     throwError(error);
   }

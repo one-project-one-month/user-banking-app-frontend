@@ -6,11 +6,17 @@ import Barcode from "react-barcode";
 import useRefreshGenerate from "../hooks/useRefreshGenerate";
 import Spinner from "@/components/common/Spinner";
 import { Skeleton } from "@/components/ui/skeleton";
+import useEventSource from "@/hooks/useEventSource";
 
 function QRToPayPage() {
-  const { timeleft, isPending, qrToken } = useRefreshGenerate(60);
-
+  const { timeleft, isPending, qrToken } = useRefreshGenerate(500);
   const isLoading = !qrToken || isPending;
+
+  const { data } = useEventSource(
+    qrToken
+      ? `personal-banking/scan/qr-to-pay/subscribe?token=${qrToken}`
+      : null
+  );
 
   return (
     <div className="h-full relative flex justify-center items-center bg-white">

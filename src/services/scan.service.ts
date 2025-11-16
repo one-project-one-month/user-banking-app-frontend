@@ -28,3 +28,24 @@ export const generateQRToPay = async (data: GenerateQRToPayPayload) => {
     throwError(error);
   }
 };
+
+export const scanQRToRecieve = async (data: { token: string }) => {
+  try {
+    const res = await API.post(
+      "personal-banking/scan/qr-to-receive/scan",
+      data
+    );
+    return res.data;
+  } catch (error) {
+    throwError(error);
+  }
+};
+
+export const scanQRToPay = async (data: { token: string }) => {
+  try {
+    const res = await API.post("personal-banking/scan/qr-to-pay/scan", data);
+    return res.data;
+  } catch (error) {
+    throwError(error);
+  }
+};

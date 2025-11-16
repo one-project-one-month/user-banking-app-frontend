@@ -34,4 +34,6 @@ export type TransactionHistory = {
   recentTransferListOptions: RecentTransactionOption[];
 };
 
+export type TransactionHistoryResponse = BaseResponse<TransactionHistory>;
+
 export type RecentTransactionResponse = BaseResponse<TransactionHistory>;

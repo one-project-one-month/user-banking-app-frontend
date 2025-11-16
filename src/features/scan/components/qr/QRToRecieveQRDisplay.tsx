@@ -4,9 +4,10 @@ import useGetUserData from "@/hooks/useGetUserData";
 
 type QRToRecieveQRDisplayProps = {
   qr: string | null;
+  qrRef: any;
 };
 
-function QRToRecieveQRDisplay({ qr }: QRToRecieveQRDisplayProps) {
+function QRToRecieveQRDisplay({ qr, qrRef }: QRToRecieveQRDisplayProps) {
   const { info } = useGetUserData();
 
   return (
@@ -19,7 +20,7 @@ function QRToRecieveQRDisplay({ qr }: QRToRecieveQRDisplayProps) {
 
       <div className="p-3">
         {qr ? (
-          <QRWithLogo size={250} value={qr} />
+          <QRWithLogo size={250} value={qr} qrRef={qrRef} />
         ) : (
           <Skeleton className="w-[250px] h-[250px]" />
         )}
