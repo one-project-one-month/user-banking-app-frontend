@@ -1,3 +1,4 @@
+import Spinner from "@/components/common/Spinner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useMediaUpload } from "@/queries/users.query";
 import { Camera } from "lucide-react";
@@ -5,7 +6,7 @@ import { useRef } from "react";
 
 function ProfileAvatar() {
   const inputRef = useRef<HTMLInputElement>(null);
-  const { mutate: upload } = useMediaUpload();
+  const { mutate: upload, isPending } = useMediaUpload();
 
   const handleChangeAvatar = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -14,6 +15,8 @@ function ProfileAvatar() {
       formData.append("file", file);
       upload(formData);
     }
+
+    event.target.value = "";
   };
 
   const onClickUpload = () => {
@@ -36,6 +39,11 @@ function ProfileAvatar() {
           className="absolute pointer-events-none w-full h-full opacity-0 cursor-pointer"
         />
       </div>
+      {isPending && (
+        <div className="w-full h-full flex bg-black opacity-50 justify-center items-center absolute top-0 left-0 z-50">
+          <Spinner />
+        </div>
+      )}
     </Avatar>
   );
 }

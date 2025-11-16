@@ -3,6 +3,7 @@ import TransactionList from "../components/TransactionList";
 import MobileHeader from "@/components/core/MobileHeader";
 import TransactionFilter from "../components/TransactionFilter";
 import { useGetTransactions } from "@/queries/transactionHistory.query";
+import PageLoading from "@/components/core/PageLoading";
 
 const TransactionHistoryPage = () => {
   // will replace with react query later
@@ -11,23 +12,21 @@ const TransactionHistoryPage = () => {
   // will replace with react query later
   const [currentFilter, setCurrentFilter] = useState<string>(``);
 
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading) return <PageLoading />;
 
-  if (error) return <p>Failed to load transactions</p>;
+  console.log(transactions);
 
   return (
     <>
-      <MobileHeader
-        backTo="/"
-        title="Transaction History"
-        className="bg-primary"
-      />
+      <MobileHeader backTo="/" title="Transaction History" />
       <main className="bg-white pb-[70px] md:pb-0">
         <TransactionFilter
           onChange={setCurrentFilter}
           currentFilter={currentFilter}
         />
-        <TransactionList transactions={transactions ?? []} />
+        <TransactionList
+          transactions={transactions?.data.recentTransferListOptions ?? []}
+        />
       </main>
     </>
   );

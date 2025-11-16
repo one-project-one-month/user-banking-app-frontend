@@ -1,19 +1,63 @@
+import { useGetRecentTransactionHistory } from "@/queries/transactionHistory.query";
 import HistoryItemCard from "./HistoryItemCard";
+import HistoryItemCardSkeleton from "./HistoryItemCardSkeleton";
+import {
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty";
+import { FileJson2 } from "lucide-react";
+import useGetUserData from "@/hooks/useGetUserData";
 
 function HistorySection() {
-  const transactionList = Array(5).fill({
-    type: "income",
-    senderName: "Bo Bo",
-    walletNumber: "223469",
-    amount: 50000,
-  });
+  const { data: history, isLoading } = useGetRecentTransactionHistory();
+  const { info } = useGetUserData();
+
+  if (isLoading)
+    return (
+      <div className="space-y-3">
+        {[...Array(5)].map((_, i) => (
+          <HistoryItemCardSkeleton key={i} />
+        ))}
+      </div>
+    );
 
   return (
-    <section>
+    <section className="min-h-120">
       <div className="flex flex-col gap-2">
-        {transactionList.map((tx, idx) => (
-          <HistoryItemCard key={idx} {...tx} />
-        ))}
+        {history?.data &&
+        history?.data.recentTransferListOptions?.length > 0 ? (
+          history?.data.recentTransferListOptions.map((tx, idx) => {
+            return (
+              <HistoryItemCard
+                key={idx}
+                senderName={tx.user.name}
+                amount={tx.account.balance}
+                walletNumber={tx.account.accountNumber}
+                type={
+                  info?.selectedAccountDetails.accountNumber ===
+                  tx.account.accountNumber
+                    ? "income"
+                    : "expense"
+                }
+              />
+            );
+          })
+        ) : (
+          <Empty>
+            <EmptyHeader>
+              <EmptyMedia>
+                <FileJson2 />
+              </EmptyMedia>
+              <EmptyTitle>No Recent Yet</EmptyTitle>
+              <EmptyDescription>
+                You haven&apos;t tranfered yet.
+              </EmptyDescription>
+            </EmptyHeader>
+          </Empty>
+        )}
       </div>
     </section>
   );

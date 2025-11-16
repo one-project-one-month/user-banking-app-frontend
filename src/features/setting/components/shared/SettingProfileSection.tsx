@@ -49,7 +49,10 @@ function SettingProfileSection({
         </p>
       </div>
       {isEdit ? (
-        <ProfileAccountSwitchBox className="absolute top-2 right-2" />
+        <ProfileAccountSwitchBox
+          accountNumber={accountNumber}
+          className="absolute top-2 right-2"
+        />
       ) : (
         <Link
           to="profile"

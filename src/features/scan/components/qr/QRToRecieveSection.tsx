@@ -6,11 +6,15 @@ import QRToRecieveAmountSetupForm from "./QRToRecieveAmountSetupForm";
 import { errorToast } from "@/lib/helper/customToasts";
 import MobileHeader from "@/components/core/MobileHeader";
 import { useGenerateRecieveQR } from "@/queries/scan.query";
+import useDownloadQRCode from "../../hooks/useDownloadQRCode";
 
 function QRToRecieveSection() {
   const [isQRGenerated, setIsQRGenerated] = useState<boolean>(false);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(true);
   const [qr, setQr] = useState<string | null>(null);
+
+  //qr download handler
+  const { qrRef, handleDownloadQR } = useDownloadQRCode();
 
   //query qr generate funtion
   const { mutateAsync: generateQR, isPending } = useGenerateRecieveQR();
@@ -32,13 +36,13 @@ function QRToRecieveSection() {
   return (
     <div className="max-w-xl h-full w-full text-black-pearl-700 flex flex-col justify-between items-center gap-8 pb-10 p-6 mx-auto border-gray-100">
       <MobileHeader backTo="/" title="QR to Recieve" />
-      <QRToRecieveQRDisplay qr={qr} />
-      <QRToRecieveActions />
+      <QRToRecieveQRDisplay qr={qr} qrRef={qrRef} />
+      <QRToRecieveActions handleDownload={handleDownloadQR} />
 
       <Dialog
         open={isDialogOpen}
         onOpenChange={(open) => {
-          //*dialog can't be open until qr generate
+          //*dialog can't be close until qr generate
           if (!isQRGenerated) {
             errorToast("Sorry :(", "You need to fill the form first!!");
             return;

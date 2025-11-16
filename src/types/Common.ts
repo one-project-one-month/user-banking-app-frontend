@@ -4,12 +4,12 @@ export type BaseResponse<T> = {
   data: T;
 };
 
-export type Tempelate = {
+export type Template = {
   id: number;
   name: string;
 };
 
 export type PersonalDetailTemplate = {
-  genderOptions: Tempelate[];
-  nationalityOptions: Tempelate[];
+  genderOptions: Template[];
+  nationalityOptions: Template[];
 };

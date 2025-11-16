@@ -7,6 +7,7 @@ interface QRWithLogoProps {
   logoSize?: number;
   errorLevel?: "L" | "M" | "Q" | "H";
   className?: string;
+  qrRef?: any;
 }
 
 export default function QRWithLogo({
@@ -16,10 +17,11 @@ export default function QRWithLogo({
   logoSize = 50,
   errorLevel = "H",
   className = "",
+  qrRef,
 }: QRWithLogoProps) {
   return (
     <div className={`relative inline-block ${className}`}>
-      <QRCodeSVG value={value} size={size} level={errorLevel} />
+      <QRCodeSVG value={value} size={size} level={errorLevel} ref={qrRef} />
       {logoUrl && (
         <div className="absolute inset-0 flex items-center justify-center">
           <img

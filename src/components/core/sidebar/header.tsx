@@ -1,9 +1,11 @@
 import CustomBreadCrumb from "@/components/common/CustomBreadCrumb";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import useGetUserData from "@/hooks/useGetUserData";
 import { useLocation } from "react-router-dom";
 
 const Header = () => {
+  const { info} = useGetUserData()
   const currentPathName = useLocation().pathname;
 
   const segments = currentPathName.split("/").filter(Boolean);
@@ -28,7 +30,7 @@ const Header = () => {
         </div>
 
         <div className="flex items-center gap-1">
-          <p>Jon Doe</p>
+          <p>{info?.username}</p>
           <Avatar className="w-9 h-9 rounded-full">
             <AvatarImage src={"https://github.com/shadcn.png"} alt="@avatar" />
             <AvatarFallback className="rounded-lg text-primary">
