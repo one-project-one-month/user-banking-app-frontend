@@ -44,7 +44,7 @@ jobs:
           #        npm-cache-${{ github.ref_name }}-
           #        npm-restore
 
-      - name: Cache npm dependencies
+      - name: Cache npm dependencies #need to be static if not change in dependencies
         uses: actions/cache@v3
         with:
           path: ~/.npm # Or the appropriate npm cache directory for your OS
