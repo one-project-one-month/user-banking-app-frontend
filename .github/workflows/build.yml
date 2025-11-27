@@ -1,6 +1,6 @@
 
 
-name: User Banking App Frontend CI ( image push to ECR Registry and artifacts push to S3 )
+name: User Banking App Frontend CI ( image push to ECR Registry )
 
 on:
   push:
