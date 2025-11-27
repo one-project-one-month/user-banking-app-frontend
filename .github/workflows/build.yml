@@ -11,7 +11,7 @@ on:
       - 'update/*'
 
   pull_request:
-    types: [opened, reopened, synchronize, merge, closed]
+    types: [opened, reopened, synchronize]
     branches:
       - main
 
@@ -35,14 +35,22 @@ jobs:
       - name: Install dependencies
         run: npm ci #This command ensures that the exact versions specified in package-lock.json are installed
 
+          #  - name: Cache npm dependencies
+          #    uses: actions/cache@v4
+          #    with:
+          #      path: ~/.npm
+          #      key: npm-cache-${{ github.sha }}
+          #      restore-keys: |
+          #        npm-cache-${{ github.ref_name }}-
+          #        npm-restore
+
       - name: Cache npm dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v3
         with:
-          path: ~/.npm
-          key: npm-cache-${{ github.sha }}
+          path: ~/.npm # Or the appropriate npm cache directory for your OS
+          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
-            npm-cache-${{ github.ref_name }}-
-            npm-restore
+            ${{ runner.os }}-npm-
 
       - name: Build the application
         run: npm run build
