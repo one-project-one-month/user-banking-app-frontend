@@ -35,22 +35,32 @@ jobs:
       - name: Install dependencies
         run: npm ci #This command ensures that the exact versions specified in package-lock.json are installed
 
-          #  - name: Cache npm dependencies
-          #    uses: actions/cache@v4
-          #    with:
-          #      path: ~/.npm
-          #      key: npm-cache-${{ github.sha }}
-          #      restore-keys: |
-          #        npm-cache-${{ github.ref_name }}-
-          #        npm-restore
-
-      - name: Cache npm dependencies #need to be static if not change in dependencies
-        uses: actions/cache@v3
+          # - name: Cache npm dependencies
+          #   uses: actions/cache@v4
+          #   with:
+          #     path: ~/.npm
+          #     key: npm-cache-${{ github.sha }}
+          #     restore-keys: |
+          #       npm-cache-${{ github.ref_name }}-
+          #       npm-restore
+      
+      - name: Cache npm dependencies
+        uses: actions/cache@v4
         with:
-          path: ~/.npm # Or the appropriate npm cache directory for your OS
-          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+          path: ~/.npm
+          key: npm-cache-${{ github.ref_name }}-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-npm-
+            npm-cache-${{ github.ref_name }}-
+            npm-cache-
+
+
+            # - name: Cache npm dependencies #need to be static if not change in dependencies
+            #   uses: actions/cache@v3
+            #   with:
+            #     path: ~/.npm # Or the appropriate npm cache directory for your OS
+            #     key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+            #     restore-keys: |
+            #       ${{ runner.os }}-npm-
 
       - name: Build the application
         run: npm run build
