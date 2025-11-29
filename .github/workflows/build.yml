@@ -43,24 +43,15 @@ jobs:
           #     restore-keys: |
           #       npm-cache-${{ github.ref_name }}-
           #       npm-restore
-      
-      - name: Cache npm dependencies
+
+      - name: Cache npm dependencies #need to be static if not change in dependencies
         uses: actions/cache@v4
         with:
-          path: ~/.npm
-          key: npm-cache-${{ github.ref_name }}-${{ github.sha }}
+          path: ~/.npm # Or the appropriate npm cache directory for your OS
+          key: npm-cache-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             npm-cache-${{ github.ref_name }}-
             npm-cache-
-
-
-            # - name: Cache npm dependencies #need to be static if not change in dependencies
-            #   uses: actions/cache@v3
-            #   with:
-            #     path: ~/.npm # Or the appropriate npm cache directory for your OS
-            #     key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
-            #     restore-keys: |
-            #       ${{ runner.os }}-npm-
 
       - name: Build the application
         run: npm run build
