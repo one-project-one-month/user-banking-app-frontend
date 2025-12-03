@@ -95,3 +95,17 @@ export const usePrepare = () => {
     },
   });
 };
+
+export const usePrepareForNickName = () => {
+  return useMutation<
+    PrepareResponse | undefined,
+    Error,
+    { toAccountNumber: string; amount?: number }
+  >({
+    mutationFn: (data: { toAccountNumber: string }) =>
+      accountTransfer(data.toAccountNumber),
+    onError: (error) => {
+      errorToast("Preparation Failed", error.message);
+    },
+  });
+};

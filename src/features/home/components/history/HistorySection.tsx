@@ -1,4 +1,4 @@
-import { useGetRecentTransactionHistory } from "@/queries/transactionHistory.query";
+import { useGetTransactions } from "@/queries/transactionHistory.query";
 import HistoryItemCard from "./HistoryItemCard";
 import HistoryItemCardSkeleton from "./HistoryItemCardSkeleton";
 import {
@@ -9,11 +9,9 @@ import {
   EmptyTitle,
 } from "@/components/ui/empty";
 import { FileJson2 } from "lucide-react";
-import useGetUserData from "@/hooks/useGetUserData";
 
 function HistorySection() {
-  const { data: history, isLoading } = useGetRecentTransactionHistory();
-  const { info } = useGetUserData();
+  const { data: history, isLoading } = useGetTransactions();
 
   if (isLoading)
     return (
@@ -35,13 +33,8 @@ function HistorySection() {
                 key={idx}
                 senderName={tx.user.name}
                 amount={tx.account.balance}
-                walletNumber={tx.account.accountNumber}
-                type={
-                  info?.selectedAccountDetails.accountNumber ===
-                  tx.account.accountNumber
-                    ? "income"
-                    : "expense"
-                }
+                walletNumber={tx.account?.accountNumber}
+                type={tx.isIncome ? "income" : "expense"}
               />
             );
           })

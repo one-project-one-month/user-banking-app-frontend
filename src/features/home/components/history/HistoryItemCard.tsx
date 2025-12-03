@@ -23,7 +23,7 @@ const HistoryItemCard: React.FC<HistoryItemCardProps> = ({
       <div className="flex justify-between items-center">
         <div>
           <p className="font-medium md:text-sm text-black-pearl-700">
-            Transfer From {senderName}
+            Transfer {isIncome ? "From" : "To"} {senderName}
           </p>
           <p className="text-xs text-gray-500">
             E-Wallet Number: {walletNumber}
