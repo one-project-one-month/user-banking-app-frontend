@@ -7,6 +7,7 @@ import z from "zod";
 import type { Nickname } from "@/types/User";
 import { useCreateNickname, useUpdateNickname } from "@/queries/users.query";
 import Spinner from "@/components/common/Spinner";
+import { usePrepare, usePrepareForNickName } from "@/queries/transfer.query";
 
 const NickNamesSchema = z.object({
   accountNumber: z.string(),
@@ -33,8 +34,10 @@ function NickNamesForm({ formData }: NickNamesFormProps) {
 
   const { mutate: update, isPending: isUpdatePending } = useUpdateNickname();
   const { mutate: create, isPending: isCreatePending } = useCreateNickname();
+  const { mutateAsync: prepare, isPending: isPreparing } =
+    usePrepareForNickName();
 
-  const onSubmit = (values: NickNamesFormValue) => {
+  const onSubmit = async (values: NickNamesFormValue) => {
     let payload;
 
     if (formData?.id) {
@@ -48,10 +51,13 @@ function NickNamesForm({ formData }: NickNamesFormProps) {
       return;
     }
 
+    const res = await prepare({ toAccountNumber: values.accountNumber });
+
     payload = {
-      toAccountId: values.accountNumber,
+      toAccountId: res?.data.toAccountDetails.id ?? 0,
       nickname: values.nickName,
     };
+
     create(payload);
     return;
   };
@@ -91,7 +97,7 @@ function NickNamesForm({ formData }: NickNamesFormProps) {
             className="w-full flex justify-center items-center gap-5"
           >
             <span>{!formData ? "Save" : "Save Changes"}</span>
-            {isUpdatePending || (isCreatePending && <Spinner />)}
+            {(isUpdatePending || isCreatePending || isPreparing) && <Spinner />}
           </Button>
         </form>
       </Form>

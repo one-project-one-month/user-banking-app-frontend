@@ -11,6 +11,7 @@ export interface Transaction {
     accountNumber: string;
     balance: number;
   };
+  isIncome: boolean;
 }
 
 export interface TransactionParams {
@@ -28,6 +29,7 @@ export type RecentTransactionOption = {
     accountNumber: string;
     balance: number;
   };
+  isIncome: boolean;
 };
 
 export type TransactionHistory = {

@@ -7,16 +7,26 @@ import useRefreshGenerate from "../hooks/useRefreshGenerate";
 import Spinner from "@/components/common/Spinner";
 import { Skeleton } from "@/components/ui/skeleton";
 import useEventSource from "@/hooks/useEventSource";
+import { useEffect } from "react";
+import { usePrepare } from "@/queries/transfer.query";
 
 function QRToPayPage() {
-  const { timeleft, isPending, qrToken } = useRefreshGenerate(500);
+  const { timeleft, isPending, qrToken } = useRefreshGenerate(60);
   const isLoading = !qrToken || isPending;
 
-  const { data } = useEventSource(
+  const { data, isConnected } = useEventSource(
     qrToken
       ? `personal-banking/scan/qr-to-pay/subscribe?token=${qrToken}`
       : null
   );
+
+  const { mutate: prepare } = usePrepare();
+
+  useEffect(() => {
+    if (isConnected && data) {
+      prepare({ toAccountNumber: data.data.accountNumber });
+    }
+  }, [isConnected]);
 
   return (
     <div className="h-full relative flex justify-center items-center bg-white">

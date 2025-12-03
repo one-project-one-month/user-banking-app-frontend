@@ -26,8 +26,8 @@ export const Confirmation = PageLoader(
 );
 
 export const Receipt = PageLoader(
-  lazy(()=>import("@/features/transfer/pages/Receipt"))
-)
+  lazy(() => import("@/features/transfer/pages/Receipt"))
+);
 //*pages
 export const Home = PageLoader(
   lazy(() => import("@/features/home/pages/HomePage"))

@@ -9,7 +9,7 @@ import Spinner from "@/components/common/Spinner";
 const pinSchema = z.object({
   pin: z
     .string()
-    .min(4, "PIN must be at least 4 digits")
+    .min(6, "PIN must be at least 6 digits")
     .max(6, "PIN must not exceed 6 digits")
     .regex(/^\d+$/, "PIN must contain only numbers"),
 });
