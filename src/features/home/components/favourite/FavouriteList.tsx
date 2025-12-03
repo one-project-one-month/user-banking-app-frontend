@@ -2,8 +2,19 @@ import { ChevronRight } from "lucide-react";
 import FavouriteCard from "./FavouriteCard";
 import FavouriteCardContainer from "./FavouriteCardContainer";
 import { useGetNicknameList } from "@/queries/users.query";
+import { useCallback } from "react";
+import { usePrepare } from "@/queries/transfer.query";
 
 function FavouriteList() {
+  const { data: nicknames, isLoading } = useGetNicknameList();
+  const { mutate: prepare } = usePrepare();
+
+  const nicknameData = nicknames?.data.nicknameOptions ?? [];
+
+  const handleTransfer = useCallback((accountNumber: string) => {
+    prepare({ toAccountNumber: accountNumber });
+  }, []);
+
   return (
     <div
       className="
@@ -22,8 +33,15 @@ function FavouriteList() {
 
       {/* Favourite Cards */}
       <div className="flex flex-col w-full gap-2.5">
-        {Array.from({ length: 3 }).map((_, i) => (
-          <FavouriteCard key={i} />
+        {nicknameData.map((nickname, i) => (
+          <FavouriteCard
+            name={nickname.nickname}
+            accountNumber={nickname.toAccountDetail.accountNumber}
+            onTransfer={() =>
+              handleTransfer(nickname.toAccountDetail.accountNumber)
+            }
+            key={i}
+          />
         ))}
 
         {/* View More */}
