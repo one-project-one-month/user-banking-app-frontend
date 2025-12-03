@@ -30,7 +30,7 @@ function SettingWeb({ handleLogout, info }: SettingWebProps) {
       />
       <SettingProfileSection
         name={info?.fullname}
-        accountNumber={info?.selectedAccountDetails.accountNumber}
+        accountNumber={info?.selectedAccountDetails?.accountNumber}
         balance={info?.currentBalance}
       />
 
@@ -91,7 +91,7 @@ function SettingWeb({ handleLogout, info }: SettingWebProps) {
         <div className="border rounded-xl p-4 flex justify-between items-center bg-white shadow-sm hover:shadow-md transition">
           <span className="text-sm text-gray-600">Current Account</span>
           <p className="font-medium text-black-pearl-700">
-            {info?.selectedAccountDetails.accountNumber}
+            {info?.selectedAccountDetails?.accountNumber}
           </p>
         </div>
         <ConfirmDialog

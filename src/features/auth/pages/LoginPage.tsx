@@ -19,6 +19,15 @@ const LoginPage: React.FC = () => {
         </div>
         <h1 className="w-full text-center mb-4 text-black-pearl-700">Login</h1>
         <LoginForm onSubmit={handleRedirect} />
+        <p className="mt-6 text-center text-sm text-gray-600">
+          Don’t have an account?{" "}
+          <span
+            onClick={() => navigate("/auth/register")}
+            className="text-blue-600 cursor-pointer hover:underline"
+          >
+            Register
+          </span>
+        </p>
       </div>
     </div>
   );

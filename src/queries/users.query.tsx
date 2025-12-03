@@ -175,9 +175,11 @@ export const useVerifyPin = () => {
 };
 
 export const useSetPin = () => {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (data: { pin: string }) => setPin(data),
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["me"] });
       successToast("Success", "Pin changed successfully");
     },
     onError: (error) => {

@@ -6,13 +6,16 @@ import transactionsRouter from "./transactionRouter";
 import scanRouter from "./scanRouter";
 import settingRouter from "./settingRouter";
 import ProtectedRoute from "@/components/common/ProtectedRoute";
+import InitailCheckedRoute from "@/components/common/InitailCheckedRoute";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: (
       <ProtectedRoute>
-        <MainLayout />
+        <InitailCheckedRoute>
+          <MainLayout />
+        </InitailCheckedRoute>
       </ProtectedRoute>
     ),
     errorElement: <div>404 Not Found</div>,

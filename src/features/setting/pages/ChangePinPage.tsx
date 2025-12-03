@@ -70,7 +70,7 @@ const ChangePinPage: React.FC = () => {
         />
       )}
 
-      <div className="flex justify-center items-center h-[300px] flex-1">
+      <div className="flex justify-center items-center min-h-[300px] flex-1">
         {renderStep()}
       </div>
     </main>

@@ -49,7 +49,7 @@ function HomePage() {
             <div className="flex flex-col gap-5">
               <AmountDisplaySection
                 amount={info?.currentBalance}
-                accountNumber={info?.selectedAccountDetails.accountNumber}
+                accountNumber={info?.selectedAccountDetails?.accountNumber}
                 isMobile={isMobile}
               />
               <ShortCutSection />

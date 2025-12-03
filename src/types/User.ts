@@ -10,15 +10,17 @@ export type UserInfo = {
   username: string;
   email: string;
   dateOfBirth: string;
-  gender: Tempelate;
-  nationality: Tempelate;
+  gender: Template;
+  nationality: Template;
   isPolicyAgreement: boolean;
   isAutoSaveReceipt: boolean;
   phoneNumber: string;
-  relationship: Tempelate;
+  relationship: Template;
   currentBalance: number;
   address: string;
   selectedAccountDetails: AccountDetail;
+  hasInitialPin: boolean;
+  isFirstTimeLogin: boolean;
 };
 
 export type AccountDetail = {
@@ -27,19 +29,18 @@ export type AccountDetail = {
   balance: number;
 };
 
-export type UserInfo = {
-  email: string;
-  username: string;
-  fullname: string;
-  dateOfBirth: string;  
-  gender: Template; 
-  nationality: Template;  
-  isPolicyAgreement: boolean;
-  isAutoSaveReceipt: boolean;
-  currentBalance: number;
-  selectedAccountDetails: AccountDetail;  
-};
-
+// export type UserInfo = {
+//   email: string;
+//   username: string;
+//   fullname: string;
+//   dateOfBirth: string;
+//   gender: Template;
+//   nationality: Template;
+//   isPolicyAgreement: boolean;
+//   isAutoSaveReceipt: boolean;
+//   currentBalance: number;
+//   selectedAccountDetails: AccountDetail;
+// };
 
 export type UserDetailResponse = BaseResponse<UserInfo>;
 
@@ -61,7 +62,6 @@ export type Nickname = {
   };
 };
 
-
 export type NicknameOptions = {
   nicknameOptions: Nickname[];
 };
@@ -75,7 +75,7 @@ export type NicknameEditPayload = {
 };
 
 export type NicknameCreatePayload = {
-  toAccountId: string;
+  toAccountId: number;
   nickname: string;
 };
 

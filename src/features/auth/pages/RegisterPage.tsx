@@ -12,6 +12,7 @@ import {
 } from "@/queries/auth.query";
 import OtpVerifyForm from "../components/OTPVerifyForm";
 import type { PersonalDetailPayload } from "@/types/Auth";
+import { useNavigate } from "react-router-dom";
 
 type Step =
   | "verify-email"
@@ -42,8 +43,11 @@ type PassportData = {
 };
 
 const RegisterPage: React.FC = () => {
+  const navigate = useNavigate();
+
   const [currentStep, setCurrentStep] = useState<Step>("verify-email");
   const [token, setToken] = useState<string | null>(null);
+  const [email, setEmail] = useState<string | null>(null);
 
   const [userData, setUserData] = useState<FormData | null>(null);
   const [idPhotos, setIdPhotos] = useState<LicenseData | PassportData | null>(
@@ -51,7 +55,8 @@ const RegisterPage: React.FC = () => {
   );
 
   const { mutateAsync: verify, isPending } = useVerifyEmail();
-  const { mutateAsync: verifyOTP } = useVerifyOTP();
+  const { mutateAsync: verifyOTP, isPending: isVerifyOTPPending } =
+    useVerifyOTP();
   const { mutateAsync: register, isPending: registerPending } =
     useRegisterUser();
 
@@ -62,29 +67,31 @@ const RegisterPage: React.FC = () => {
 
   const handleVerify = useCallback(
     async (value: { email: string }) => {
-      const res = await verify(value);
-      const res2 = await verifyOTP({ email: value.email, otp: res?.data });
-      console.log(res2);
-      setToken(res2?.data?.verificationToken);
-      console.log(token);
-      goToStep("register");
+      await verify(value);
+      setEmail(value.email);
+      // const res2 = await verifyOTP({ email: value.email, otp: res?.data });
+      // console.log(res2);
+      // setToken(res2?.data?.verificationToken);
+      // console.log(token);
+      goToStep("otp-verify");
     },
     [goToStep]
   );
 
-  // const handleOtpVerify = useCallback(
-  //   async (data: { otp: string }) => {
-  //     const res = await verifyOTP({ email: email ?? "", otp: data.otp });
-  //     setToken(res?.data?.verificationToken ?? "");
-  //     goToStep("register");
-  //   },
-  //   [goToStep]
-  // );
+  const handleOtpVerify = useCallback(
+    async (data: { otp: string }) => {
+      const res = await verifyOTP({ email: email ?? "", otp: data.otp });
+      setToken(res?.data?.verificationToken ?? "");
+      goToStep("register");
+    },
+    [goToStep, email]
+  );
 
   const handleRegisterSubmit = useCallback(
     async (data: PersonalDetailPayload) => {
       await register({ ...data, verificationToken: token ?? "" });
-      goToStep(data.kycType === "License" ? "license" : "passport");
+      // goToStep(data.kycType === "License" ? "license" : "passport");
+      navigate("/auth/waiting");
     },
     [goToStep, token]
   );
@@ -160,13 +167,13 @@ const RegisterPage: React.FC = () => {
           <EmailVeriflyForm handleSubmit={handleVerify} isPending={isPending} />
         )}
 
-        {/* {currentStep === "otp-verify" && (
+        {currentStep === "otp-verify" && (
           <OtpVerifyForm
             onSubmit={handleOtpVerify}
-            otp={otp}
+            otp={null}
             isLoading={isVerifyOTPPending}
           />
-        )} */}
+        )}
 
         {currentStep === "register" && (
           <RegisterForm
