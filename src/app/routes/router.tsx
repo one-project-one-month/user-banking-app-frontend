@@ -7,6 +7,7 @@ import scanRouter from "./scanRouter";
 import settingRouter from "./settingRouter";
 import ProtectedRoute from "@/components/common/ProtectedRoute";
 import InitailCheckedRoute from "@/components/common/InitailCheckedRoute";
+import SetInitialPinPage from "@/features/auth/pages/SetInitialPinPage";
 
 const router = createBrowserRouter([
   {
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
       ...transferRouter,
       ...settingRouter,
     ],
+  },
+  {
+    path: "/set-init-pin",
+    element: <SetInitialPinPage />,
   },
   ...authRouter,
 ]);

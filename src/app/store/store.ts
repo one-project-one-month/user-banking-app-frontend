@@ -1,10 +1,12 @@
-import authReducer from "@/features/auth/authSlice";
+import authReducer from "@/features/auth/redux/authSlice";
 import { configureStore } from "@reduxjs/toolkit";
-import accountTransferReducer from "@/features/transfer/redux/accountTransferSlice"
+import accountTransferReducer from "@/features/transfer/redux/accountTransferSlice";
+import userReducer from "@/features/auth/redux/userSlice";
 export const store = configureStore({
   reducer: {
     auth: authReducer,
-    transfer: accountTransferReducer
+    transfer: accountTransferReducer,
+    user: userReducer,
   },
 });
 
