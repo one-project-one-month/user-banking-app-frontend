@@ -2,6 +2,17 @@
 name: Deployment static website to S3 with terraform
 
 on:
+  push:
+    branches:
+      - 'ft/*'
+      - 'Comflict/Check'
+      - 'development'
+      - 'update/*'
+
+  pull_request:
+    types: [opened, reopened, synchronize]
+    branches:
+      - main
   workflow_run:
     workflows:
       -  "User Banking App Frontend CI ( image push to ECR Registry )"
