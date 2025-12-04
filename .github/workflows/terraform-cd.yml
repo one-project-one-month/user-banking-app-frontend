@@ -3,8 +3,12 @@ name: Deployment static website to S3 with terraform
 
 on:
   workflow_run:
-    workflows: ["User Banking App Frontend CI ( image push to ECR Registry )"]
-    types: [completed]
+    workflows:
+      -  "User Banking App Frontend CI ( image push to ECR Registry )"
+    types:
+      - completed
+      
+
 
 jobs:
   terraform:
@@ -22,7 +26,7 @@ jobs:
         uses: actions/download-artifact@v5.0.0
         with:
           name: dist
-          path: dist
+          path: .
 
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v3
