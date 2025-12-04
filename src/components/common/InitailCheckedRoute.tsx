@@ -1,15 +1,15 @@
-import Cookies from "js-cookie";
+import useGetUserData from "@/hooks/useGetUserData";
 import { type ReactNode } from "react";
 import { Navigate } from "react-router-dom";
 
 function InitailCheckedRoute({ children }: { children: ReactNode }) {
-  const hasInitailPin = Cookies.get("HasInitPin");
+  const { hasInitailPin } = useGetUserData();
 
-  if (hasInitailPin) {
+  if (hasInitailPin || localStorage.getItem("InitialPin")) {
     return <>{children}</>;
   }
 
-  return <Navigate to={"/auth/set-init-pin"} />;
+  return <Navigate to={"/set-init-pin"} />;
 }
 
 export default InitailCheckedRoute;

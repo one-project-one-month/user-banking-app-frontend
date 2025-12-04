@@ -21,26 +21,34 @@ type NickNamesFormValue = z.infer<typeof NickNamesSchema>;
 
 type NickNamesFormProps = {
   formData: Nickname | null;
+  isRecipt?: boolean;
 };
 
-function NickNamesForm({ formData }: NickNamesFormProps) {
+function NickNamesForm({ formData, isRecipt = false }: NickNamesFormProps) {
   const form = useForm<NickNamesFormValue>({
     resolver: zodResolver(NickNamesSchema),
     defaultValues: {
-      accountNumber: formData ? String(formData?.toAccountDetail?.id) : "",
+      accountNumber: formData
+        ? isRecipt
+          ? String(formData.id)
+          : String(formData?.toAccountDetail?.id)
+        : "",
       nickName: formData?.nickname ?? "",
     },
   });
 
+  console.log(formData?.id);
+
   const { mutate: update, isPending: isUpdatePending } = useUpdateNickname();
-  const { mutate: create, isPending: isCreatePending } = useCreateNickname();
+  const { mutateAsync: create, isPending: isCreatePending } =
+    useCreateNickname();
   const { mutateAsync: prepare, isPending: isPreparing } =
     usePrepareForNickName();
 
   const onSubmit = async (values: NickNamesFormValue) => {
     let payload;
 
-    if (formData?.id) {
+    if (formData?.id && !isRecipt) {
       payload = {
         id: formData.id,
         toAccountId: values.accountNumber,
@@ -51,7 +59,9 @@ function NickNamesForm({ formData }: NickNamesFormProps) {
       return;
     }
 
-    const res = await prepare({ toAccountNumber: values.accountNumber });
+    const res = await prepare({
+      toAccountNumber: isRecipt ? formData?.id : values.accountNumber,
+    });
 
     payload = {
       toAccountId: res?.data.toAccountDetails.id ?? 0,
@@ -59,6 +69,7 @@ function NickNamesForm({ formData }: NickNamesFormProps) {
     };
 
     create(payload);
+
     return;
   };
 
@@ -79,7 +90,7 @@ function NickNamesForm({ formData }: NickNamesFormProps) {
             placeholder="Enter account number"
             form={form}
             wrapperClass="mb-6"
-            type={formData ? "hidden" : "text"}
+            type={formData || isRecipt ? "hidden" : "text"}
             labelClass={`${formData && "hidden"}`}
           />
           <FormFloatinglabelInput

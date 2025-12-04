@@ -2,7 +2,7 @@ import axios, { type AxiosInstance } from "axios";
 import Cookies from "js-cookie";
 import AppConfig from "../config/appConfig";
 import { store } from "../store/store";
-import { logout, refreshAccessToken } from "@/features/auth/authSlice";
+import { logout, refreshAccessToken } from "@/features/auth/redux/authSlice";
 
 const BASE_URL = AppConfig.BASE_URL;
 

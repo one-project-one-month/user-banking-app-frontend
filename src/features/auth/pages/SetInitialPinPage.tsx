@@ -1,5 +1,6 @@
 import PinForm from "@/features/setting/components/change-pin/PinForm";
 import { useSetPin } from "@/queries/users.query";
+import Cookies from "js-cookie";
 
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
@@ -12,6 +13,7 @@ function SetInitialPinPage() {
   const handleChangePin = useCallback(
     async (data: { pin: string }) => {
       await setPin(data);
+      localStorage.setItem("InitialPin", String(true));
       navigate("/");
     },
     [navigate]

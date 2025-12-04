@@ -1,4 +1,4 @@
-import { setTokens } from "@/features/auth/authSlice";
+import { setTokens } from "@/features/auth/redux/authSlice";
 import { errorToast, successToast } from "@/lib/helper/customToasts";
 import {
   getTemplate,

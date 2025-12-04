@@ -27,7 +27,7 @@ function HistorySection() {
       <div className="flex flex-col gap-2">
         {history?.data &&
         history?.data.recentTransferListOptions?.length > 0 ? (
-          history?.data.recentTransferListOptions.map((tx, idx) => {
+          history?.data.recentTransferListOptions.slice(0, 6).map((tx, idx) => {
             return (
               <HistoryItemCard
                 key={idx}

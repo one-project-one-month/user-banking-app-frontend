@@ -112,15 +112,11 @@ export const switchAccount = async (accountId: number) => {
 
 export const mediaUpload = async (data: FormData) => {
   try {
-    const response = await API.post(
-      "personal-banking/users/media/upload",
-      data,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    );
+    const response = await API.post("media/upload", data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
     return response.data;
   } catch (error) {
     throwError(error);
