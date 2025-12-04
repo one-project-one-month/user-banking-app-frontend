@@ -1,5 +1,6 @@
 import { useGetCurrentUser } from "@/queries/users.query";
 import Cookies from "js-cookie";
+import { useEffect } from "react";
 
 function useGetUserData() {
   const { data: user, isLoading: isUserDataLoading } = useGetCurrentUser();
@@ -10,8 +11,12 @@ function useGetUserData() {
 
   const hasInitailPin = user?.data.hasInitialPin;
 
-  Cookies.set("UserInfo", info as any);
-  Cookies.set("HasInitPin", hasInitailPin as any);
+  useEffect(() => {
+    if (user) {
+      Cookies.set("UserInfo", info as any);
+      Cookies.set("HasInitPin", hasInitailPin as any);
+    }
+  }, [user]);
 
   return {
     info,
